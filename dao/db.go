@@ -33,7 +33,7 @@ func Init() {
 	}
 
 	// 数据库迁移(自动建表)
-	db.AutoMigrate(&model.User{})
+	db.AutoMigrate(&model.User{}, &model.Article{}, &model.TagMapArticle{}, &model.Tag{})
 
 	// 获取通用数据库对象 sql.DB ，然后使用其提供的功能
 	sqlDB, _ := db.DB()

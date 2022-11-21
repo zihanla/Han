@@ -5,4 +5,7 @@ import "Han/dao"
 func main() {
 	// 引入数据库
 	dao.Init()
+
+	// 测试表
+	//dao.Togo()
 }
