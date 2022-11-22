@@ -9,6 +9,8 @@ import (
 var (
 	AppMode  string
 	HttpPort string
+	Secret   string
+	JwtKey   string
 
 	Db         string
 	DbHost     string
@@ -31,6 +33,8 @@ func LoadServer(file *ini.File) {
 	// Section选择区 Key选择k值(键) MustString v(值) 设置默认值
 	AppMode = file.Section("server").Key("AppMode").MustString("debug")
 	HttpPort = file.Section("server").Key("HttpPort").MustString(":3000")
+	Secret = file.Section("server").Key("Secret").MustString("但行好事，莫问前程")
+	JwtKey = file.Section("server").Key("JwtKey").MustString("SuiYuan")
 }
 
 func LoadData(file *ini.File) {

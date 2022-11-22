@@ -1,11 +1,14 @@
 package main
 
-import "Han/dao"
+import (
+	"Han/dao"
+	"Han/routes"
+)
 
 func main() {
-	// 引入数据库
+	// 初始化数据库链接
 	dao.Init()
 
-	// 测试表
-	//dao.Togo()
+	// 注册路由
+	routes.Setup()
 }
