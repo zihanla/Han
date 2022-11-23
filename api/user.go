@@ -19,12 +19,13 @@ func Login(c *gin.Context) {
 	}
 	// 业务处理
 	// 只要状态码不为CodeSuccess 都直接返回错误信息
-	if code := service.Login(p); code != utils.CodeSuccess {
+	code, token := service.Login(p)
+	if code != utils.CodeSuccess {
 		utils.ResponseError(c, code)
 		return
 	}
 	// 返回响应
-	utils.ResponseSuccess(c, "登录成功")
+	utils.ResponseSuccess(c, token)
 }
 
 // CheckPassword 检查密码
@@ -38,10 +39,13 @@ func CheckPassword(c *gin.Context) {
 	}
 	// 业务处理
 	// 验证密码
-	if code := service.CheckPassword(p); code != utils.CodeSuccess {
+	code := service.CheckPassword(p)
+
+	if code != utils.CodeSuccess {
 		utils.ResponseError(c, code)
 		return
 	}
+
 	// 返回响应
 	utils.ResponseSuccess(c, nil)
 }

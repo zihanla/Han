@@ -9,7 +9,7 @@ import (
 )
 
 // Login 登录
-func Login(p *model.ParamLogin) int {
+func Login(p *model.ParamLogin) (int, string) {
 	// 把前端参数赋值给 User对象
 	user := model.User{
 		Username: p.Username,
@@ -19,19 +19,23 @@ func Login(p *model.ParamLogin) int {
 	// 数据库：查找指定用户信息
 	data := dao.Login(user)
 
-	// 验证用户信息
-
 	// 用户是否存在
 	if data.ID == 0 {
-		return utils.CodeUserNotExist
+		return utils.CodeUserNotExist, ""
 	}
 	// 密码是否正确
 	if EncryPassword(user.Password) != data.Password {
-		return utils.CodeUserPasswordWrong
+		return utils.CodeUserPasswordWrong, ""
 	}
 
-	// 验证通过 返回成功状态码
-	return utils.CodeSuccess
+	// 生成JWT
+	token, code := utils.GenToken(data.Username)
+	if code != utils.CodeSuccess {
+		return code, ""
+	}
+
+	// 验证通过 返回成功状态码 和 token
+	return utils.CodeSuccess, token
 }
 
 // CheckPassword 检查密码

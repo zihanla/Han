@@ -2,6 +2,7 @@ package routes
 
 import (
 	"Han/api"
+	"Han/middleware"
 	"Han/utils"
 	"net/http"
 
@@ -13,16 +14,24 @@ func Setup() {
 	gin.SetMode(utils.AppMode)
 	// 创建一个Gin实例
 	r := gin.Default()
+	// 分组
+	auth := r.Group("admin", middleware.JwtAuth())
+	// 权限组
+	{
+		auth.PUT("/user", api.UpdateUser) // 更新用户
+	}
 
-	r.GET("/", func(c *gin.Context) {
-		c.String(http.StatusOK, "I'm fine")
-	})
+	// 公共组
+	{
+		r.GET("/", func(c *gin.Context) {
+			c.String(http.StatusOK, "I'm fine")
+		})
 
-	r.POST("/login", api.Login) // 登录
+		r.POST("/login", api.Login) // 登录
 
-	r.POST("/check", api.CheckPassword) // 检查密码
+		r.POST("/check", api.CheckPassword) // 检查密码
+	}
 
-	r.PUT("/login", api.UpdateUser) // 更新用户
 	// 设置服务端口
 	r.Run(utils.HttpPort)
 }
