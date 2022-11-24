@@ -1,7 +1,6 @@
 package dao
 
 import (
-	"Han/model"
 	"Han/utils"
 	"fmt"
 	"time"
@@ -23,17 +22,19 @@ func Init() {
 		utils.DbName,
 	)
 	db, err = gorm.Open(mysql.Open(dns), &gorm.Config{
+		SkipDefaultTransaction: false, // 关闭跳过默认事务
 		NamingStrategy: schema.NamingStrategy{
 			// 使用单数表名，启用该选项，此时，`User` 的表名应该是 `user`
 			SingularTable: true,
 		},
+		DisableForeignKeyConstraintWhenMigrating: true, // 禁用物理外键，使用 逻辑外键(代码里自动外键 外键关系)
 	})
 	if err != nil {
 		fmt.Println("连接数据库失败，请检查参数：", err)
 	}
 
 	// 数据库迁移(自动建表)
-	db.AutoMigrate(&model.User{}, &model.Article{}, &model.TagMapArticle{}, &model.Tag{})
+	//db.AutoMigrate(&model.User{}, &model.Article{}, &model.ArticleTag{}, &model.Tag{})
 
 	// 获取通用数据库对象 sql.DB ，然后使用其提供的功能
 	sqlDB, _ := db.DB()
