@@ -19,6 +19,14 @@ func Setup() {
 	// 权限组
 	{
 		auth.PUT("/user", api.UpdateUser) // 更新用户
+
+		auth.POST("/tag", api.AddTag) // 添加标签
+
+		auth.DELETE("/tag/:id", api.DelTag) // 删除标签
+
+		auth.PUT("/tag/:id", api.UpdateTag) // 更新标签
+
+		auth.GET("/tag", api.GetTag) // 标签列表
 	}
 
 	// 公共组
@@ -30,6 +38,7 @@ func Setup() {
 		r.POST("/login", api.Login) // 登录
 
 		r.POST("/check", api.CheckPassword) // 检查密码
+
 	}
 
 	// 设置服务端口
