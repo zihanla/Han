@@ -11,6 +11,8 @@ func CountTag() int64 {
 	return total
 }
 
+// 指定标签下文章个数
+
 // AddTag 添加标签
 func AddTag(tag model.Tag) error {
 	return db.Create(&tag).Error

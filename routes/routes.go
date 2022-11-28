@@ -39,6 +39,16 @@ func Setup() {
 
 		r.POST("/check", api.CheckPassword) // 检查密码
 
+		r.POST("/article", api.AddArt) // 添加文章
+
+		r.DELETE("/article/:id", api.DelArt) // 删除文章
+
+		r.PUT("/article/:id", api.UpdateArt) // 更新文章
+
+		r.GET("/articles", api.GetArt) // 获取文章列表
+
+		r.GET("/article/:id", api.GetArtInfo) // 获取指定文章
+
 	}
 
 	// 设置服务端口
