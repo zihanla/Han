@@ -19,3 +19,8 @@ type ParamArticle struct {
 	Img     string `json:"img"`                        // 图片
 	Tag     []uint `json:"tag"`                        // 标签关联
 }
+
+// ParamSay 说说请求参数
+type ParamSay struct {
+	Content string `json:"content" binding:"required"` // 正文
+}

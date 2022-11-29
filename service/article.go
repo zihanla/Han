@@ -88,5 +88,14 @@ func GetArtInfo(id int) (int, *model.Article) {
 }
 
 // GetTagArt 指定标签下的所有文章
-func GetTagArt() {
-}
+//func GetTagArt(id, pageSize, pageOffset int) (int, *[]model.Article, *int64) {
+//	// 创建一个容器装查到的数据
+//	articles := new([]model.Article)
+//	total := new(int64)
+//	// 数据库：获取列表
+//	if err := dao.GetTagArt(id, pageSize, pageOffset, total, articles); err != nil {
+//		fmt.Println(err)
+//		return utils.CodeError, nil, nil
+//	}
+//	return utils.CodeSuccess, articles, total
+//}

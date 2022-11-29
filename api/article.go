@@ -18,7 +18,6 @@ func AddArt(c *gin.Context) {
 		utils.ResponseError(c, utils.CodeInvalidParam)
 		return
 	}
-	//fmt.Println("api:", p)
 	// 业务处理
 	if code := service.AddArt(p); code != utils.CodeSuccess {
 		utils.ResponseErrorWithMsg(c, code, "添加失败")
@@ -92,6 +91,21 @@ func GetArtInfo(c *gin.Context) {
 }
 
 // GetTagArt 指定标签下的所有文章
-func GetTagArt(c *gin.Context) {
-
-}
+//func GetTagArt(c *gin.Context) {
+//	// 获取前端数据
+//	id, _ := strconv.Atoi(c.Param("id"))
+//	pageSize, _ := strconv.Atoi(c.Query("pageSize"))     // 每页大小
+//	pageOffset, _ := strconv.Atoi(c.Query("pageOffset")) // 当前页
+//	// 业务处理
+//	code, articles, total := service.GetTagArt(id, pageSize, pageOffset)
+//	if code != utils.CodeSuccess {
+//		utils.ResponseErrorWithMsg(c, code, "获取失败")
+//		return
+//	}
+//	// 返回响应
+//	utils.ResponseSuccess(c, gin.H{
+//		"articles": articles,
+//		"total":    total,
+//	})
+//
+//}

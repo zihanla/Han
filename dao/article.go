@@ -2,16 +2,13 @@ package dao
 
 import (
 	"Han/model"
-	"fmt"
 
 	"gorm.io/gorm"
 )
 
 // AddArt 添加文章
 func AddArt(article model.Article) error {
-
 	err := db.Create(&article).Error
-	//fmt.Println("dao:", article.Tag)
 	return err
 }
 
@@ -42,7 +39,6 @@ func GetArt(pageSize, pageOffset int, total *int64, articles *[]model.Article) e
 	err := db.Preload("Tag").Select("id,created_at,updated_at,title,`desc`,img").Limit(pageSize).Offset((pageOffset - 1) * pageSize).Order("created_at DESC").Find(articles).Error
 	// 计算文章数量
 	db.Model(articles).Count(total)
-	fmt.Println(total)
 	return err
 }
 
@@ -51,7 +47,11 @@ func GetArtInfo(id int, article *model.Article) error {
 	return db.Preload("Tag").First(article, "id = ?", id).Error
 }
 
-// GetTagArt 指定标签下的所有文章
-func GetTagArt() {
-
-}
+//// GetTagArt 指定标签下的所有文章
+//func GetTagArt(id, pageSize, pageOffset int, total *int64, articles *[]model.Article) error {
+//	// Preload 预加载 同时加载指定表信息
+//	err := db.Preload("Tag").Select("id,created_at,updated_at,title,`desc`,img").Limit(pageSize).Offset((pageOffset-1)*pageSize).Order("created_at DESC").Find(articles).Error
+//	// 查找标签的同时加载文章
+//	db.Model(articles).Count(total)
+//	return err
+//}
