@@ -5,7 +5,7 @@
   "description": "子涵的个人博客",
   "scripts": {
     "build": "node src/index.js",
-    "d": "deploy.bat"
+    "d": "pnpm build && git add . && git commit -m \"update blog\" && git push"
   },
   "keywords": [],
   "author": "子涵",

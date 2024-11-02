@@ -1,7 +1,7 @@
 {
   "./src/templates/page.html": "33bc601c08ac77ede0c27434ab94f5a1",
   "./src/templates/index.js": "ad01dccf29a6da8511923e3e67e566e8",
-  "./src/templates/style.css": "fff50b31e4df13541d81f8331aa5a2f0",
+  "./src/templates/style.css": "f1c1c7c01c669d798fe6ca92b9956719",
   "./src/templates/journals.html": "43b9ccb678dcb83ab9ac89e23cdf9d2b",
   "./journals.json": "806be901bc82a6cbb43092e71b72dde4",
   "./content/2022年度总结.md": "eeff706b00142f6fdc2987faa2cb31e8",
@@ -52,7 +52,5 @@
   "./content/逃避与拖延.md": "7fc04e1a39bf76311c7653781ea2070f",
   "./content/随笔-1月27.md": "fd79ab7f23a444979494fb77df9be4eb",
   "./content/骑行的收获.md": "e0e133bafa00fb7b45347191d440e4f1",
-  "./content/黎明前的潜伏.md": "fa164ef66111b6d6d88e89573deeea2b",
-  "./content/10月6随笔.md": "446b7804ab9947176150e5f30a8d0ad9",
-  "./about.md": "3dab4d969a40b54e07ae27ea8b825fda"
+  "./content/黎明前的潜伏.md": "fa164ef66111b6d6d88e89573deeea2b"
 }
