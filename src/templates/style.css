@@ -358,6 +358,7 @@ blockquote p:last-child {
   border-radius: 50%;
   text-decoration: none;
   font-size: 1.1rem;
+  z-index: 999;
 }
 
 .back-to-top:hover {
@@ -393,7 +394,7 @@ blockquote p:last-child {
 
 .journal-item:hover {
   background-color: var(--bg-light);
-  transform: translateX(8px);
+  padding-left: 2rem;
 }
 
 .journal-date {
@@ -431,7 +432,7 @@ blockquote p:last-child {
   }
   
   .journal-item:hover {
-    transform: translateX(4px);
+    padding-left: 1.5rem;
   }
   
   .journal-date {
