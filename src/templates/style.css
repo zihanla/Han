@@ -299,11 +299,14 @@ blockquote p:last-child {
 .post-meta {
   color: var(--text-secondary);
   font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
 }
 
 .post-meta .separator {
-  margin: 0 0.5em;
   opacity: 0.6;
+  margin: 0;
 }
 
 .post-header::after {
