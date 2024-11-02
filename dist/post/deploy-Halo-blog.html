@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta content="blog, 涵有闲, Han, 碎片生活, note, 个人博客, 生活记录" name="keywords" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="- 2023.4.11 使用 notion + nobelium + vercel 的形式部署博客 - 2022.12.30 halo 博客 2.0 时代了，不大喜欢了，转回 typecho,目前教程仅对 halo1.5 及以下生效。 >..." />
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <link rel="stylesheet" href="/static/style.css" />
+    <title>一键部署Halo博客</title>
+  </head>
+  <body id="top">
+    <a href="#top" class="back-to-top" aria-label="返回顶部">↑</a>
+    <header class="site-header">
+      <div class="site-title">
+        <a href="/">涵有闲</a>
+      </div>
+      <nav class="site-nav">
+        <a href="/about#now">现在</a>
+        <a href="/journals">碎语</a>
+        <a href="/about">关于</a>
+      </nav>
+    </header>
+
+    <article>
+      <header class="post-header">
+        <h1>一键部署Halo博客</h1>
+        <div class="post-meta">
+          <span>子涵</span>
+          <span class="separator">·</span>
+          <span>2022-06-29</span>
+        </div>
+      </header>
+      <div class="post-content"><h2>前言</h2>
+<ul>
+<li>2023.4.11 使用 notion + nobelium + vercel 的形式部署博客</li>
+<li>2022.12.30 halo 博客 2.0 时代了，不大喜欢了，转回 typecho,目前教程仅对 halo1.5 及以下生效。</li>
+</ul>
+<blockquote>
+<p>本文的目的是，让大家可以专注于写作本身；至于如何搭建，大道至简，全程跟着我的节奏，无脑 CV 即可，不要纠结过程。</p>
+</blockquote>
+<h2>安装</h2>
+<h3>利其器</h3>
+<ul>
+<li>环境 Centos7.6</li>
+<li>服务器管理工具 <a href="http://www.hostbuf.com/t/988.html">FinalShell</a></li>
+<li>写作工具 <a href="https://www.aliyundrive.com/drive/folder/6247c8ccaff7826206044d95874b4a6e0b666d53">Typora</a></li>
+<li>升级商店、安装下载工具</li>
+</ul>
+<pre><code class="hljs language-bash"><span class="hljs-comment"># 升级yum管理包(升级应用商店 腾讯云等地方买的升级不是不必要)</span>
+yum update
+<span class="hljs-comment"># 安装wget</span>
+yum install -y wget
+</code></pre><p>视频教程 <a href="https://www.bilibili.com/video/BV1NU4y1X7ai">一键部署个人博客，专注写作本身</a></p>
+<h3>安装宝塔</h3>
+<blockquote>
+<p>7 系列的宝塔安装是需要登录的，这里借助 彩虹脚本 进行优化 （有需要输入 y 的地方一路 y 下去）</p>
+</blockquote>
+<pre><code class="hljs language-bash"><span class="hljs-comment"># 安装宝塔</span>
+wget -O install.sh http://f.cccyun.cc/bt/install_6.0.sh &amp;&amp; bash install.sh
+<span class="hljs-comment"># 降级到7.7</span>
+curl http://f.cccyun.cc/bt/update6.sh|bash
+<span class="hljs-comment"># 优化脚本</span>
+wget -O optimize.sh http://f.cccyun.cc/bt/optimize.sh &amp;&amp; bash optimize.sh
+</code></pre><h3>安装 Docker 容器</h3>
+<blockquote>
+<p>参考 菜鸟笔记 （有需要输入 y 的地方一路 y 下去）</p>
+</blockquote>
+<pre><code class="hljs language-bash"><span class="hljs-comment"># 使用官方脚本自动安装Docker</span>
+curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun
+<span class="hljs-comment"># 启动Docker</span>
+<span class="hljs-built_in">sudo</span> systemctl start docker
+<span class="hljs-comment"># 测试是否安装成功</span>
+ <span class="hljs-built_in">sudo</span> docker run hello-world
+</code></pre><h3>使用 Docker 部署 Halo</h3>
+<p>Halo 官方文档 <a href="https://docs.halo.run/getting-started/install/docker">使用 Docker 部署 Halo</a> 超级详细，我们直接跟着官方的来就行了</p>
+<h3>反向代理</h3>
+<blockquote>
+<p>登录宝塔，推荐安装 LNMP 时，只需选择安装 Nginx；安装完成后点击网站建一个站点,配置对应域名的 SSL 证书,并强制开启 https；然后在配置文件添加反代脚本即可。</p>
+</blockquote>
+<pre><code class="hljs language-ruby">  <span class="hljs-comment"># 需要注释掉的地方(大概在40多行): Ctrl + / 选中当前内容一键注释</span>
+  <span class="hljs-comment"># location ~ .*\.(gif|jpg|jpeg|png|bmp|swf)$</span>
+  <span class="hljs-comment"># {</span>
+  <span class="hljs-comment">#     expires      30d;</span>
+  <span class="hljs-comment">#     error_log /dev/null;</span>
+  <span class="hljs-comment">#     access_log /dev/null;</span>
+  <span class="hljs-comment"># }</span>
+
+  <span class="hljs-comment"># location ~ .*\.(js|css)?$</span>
+  <span class="hljs-comment"># {</span>
+  <span class="hljs-comment">#     expires      12h;</span>
+  <span class="hljs-comment">#     error_log /dev/null;</span>
+  <span class="hljs-comment">#     access_log /dev/null;</span>
+  <span class="hljs-comment"># }</span>
+
+  <span class="hljs-comment"># 反代脚本:</span>
+     location / {
+  proxy_pass <span class="hljs-symbol">http:</span>/<span class="hljs-regexp">/127.0.0.1:8090/</span>;
+  rewrite ^<span class="hljs-regexp">/(.*)$ /</span><span class="hljs-variable">$1</span> <span class="hljs-keyword">break</span>;
+  proxy_redirect off;
+  proxy_set_header <span class="hljs-title class_">Host</span> <span class="hljs-variable">$host</span>;
+  proxy_set_header X-<span class="hljs-title class_">Forwarded</span>-<span class="hljs-title class_">Proto</span> <span class="hljs-variable">$scheme</span>;
+  proxy_set_header X-<span class="hljs-title class_">Real</span>-<span class="hljs-variable constant_">IP</span> <span class="hljs-variable">$remote_addr</span>;
+  proxy_set_header X-<span class="hljs-title class_">Forwarded</span>-<span class="hljs-title class_">For</span> <span class="hljs-variable">$proxy_add_x_forwarded_for</span>;
+  proxy_set_header <span class="hljs-title class_">Upgrade</span>-<span class="hljs-title class_">Insecure</span>-<span class="hljs-title class_">Requests</span> <span class="hljs-number">1</span>;
+  proxy_set_header X-<span class="hljs-title class_">Forwarded</span>-<span class="hljs-title class_">Proto</span> https;
+}
+</code></pre><h3>主题推荐</h3>
+<blockquote>
+<p>位置不分前后，推荐的主题都是有在更新的，基本都用过，主题仓库的可以不用看了</p>
+</blockquote>
+<ul>
+<li>简洁风格<ul>
+<li><a href="https://github.com/liaocp666/halo-theme-daisy">daisy</a></li>
+<li><a href="https://halo.run/archives/theme-xue.html">Xue</a></li>
+<li><a href="https://rz.sbl/">若至随笔</a> 还没发出来不过超</li>
+<li><a href="https://github.com/Pedro-null/halo-theme-hingle">hingle</a></li>
+<li><a href="https://halo.run/archives/materialyour.html">MaterialYour</a></li>
+<li><a href="https://github.com/halo-dev/halo-theme-anatole">anatole</a></li>
+<li><a href="https://github.com/guqing/halo-theme-higan">彼岸</a></li>
+<li><a href="https://github.com/iRoZhi/Halo-vCards-theme">vCards</a></li>
+<li><a href="https://halo.run/archives/butterfly.html">Butterfly</a></li>
+</ul>
+</li>
+<li>功能型<ul>
+<li><a href="https://halo.run/archives/dream.html">Dream</a>功能超级多，关闭了大量功能后，称得上简洁</li>
+<li><a href="https://halo.run/archives/joe20.html">Joe</a></li>
+<li><a href="https://halo.run/archives/theme-sakura.html">Sakura</a></li>
+<li><a href="https://blog.xinac.cn/">新逸 Cary</a></li>
+</ul>
+</li>
+</ul>
+<h2>结束语</h2>
+<p>大道至简，愿大家不要因为乱七八糟的东西，忘记了本来的目的，就像写作。</p>
+</div>
+    </article>
+    <footer>
+      <span>© 2021-2024 子涵</span>
+      <a href="/feed">订阅</a>
+    </footer>
+    
+    <!-- 百度统计 -->
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?dd3de863d99a084d9ebd540d0bb7724b";
+      hm.async = true;
+      var s = document.getElementsByTagName("script")[0]; 
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+  
+  </body>
+</html>
