@@ -4,11 +4,18 @@
         <title>涵有闲</title>
         <link>https://hyx.ink</link>
         <description>动起来就好，想做就去做吧。涵有闲博客，记录生活点滴，分享生活感悟。</description>
-        <lastBuildDate>Sat, 02 Nov 2024 23:11:16 GMT</lastBuildDate>
+        <lastBuildDate>Sun, 03 Nov 2024 09:38:46 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>zh-CN</language>
         <atom:link href="https://hyx.ink/feed" rel="self" type="application/rss+xml"/>
+        <item>
+            <title><![CDATA[大理昆明小游库存]]></title>
+            <link>https://hyx.ink/post/da-li-kun-ming-xiao-you-kucun</link>
+            <guid>https://hyx.ink/post/da-li-kun-ming-xiao-you-kucun</guid>
+            <pubDate>Wed, 09 Oct 2024 22:34:00 GMT</pubDate>
+            <description><![CDATA[国庆前几天出去玩的库存，对象，对象闺蜜，我兄弟，奇葩组合，难得。 从曲靖到大理，早 5 点的车，10 点多到达古城住下。 !古城苍山脚下 !古城城门 天气还不错，没啥玩儿的，到处吃东西了。 勇敢的尝试是烤乳扇，清新脱俗，吃不惯。...]]></description>
+        </item>
         <item>
             <title><![CDATA[记一次雨骑]]></title>
             <link>https://hyx.ink/post/a-ride-in-the-rain</link>
