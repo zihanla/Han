@@ -5,8 +5,6 @@ slug: "acer-legend-x-hotkey-recover"
 date: 2021-09-15
 ---
 
-
-
 > 现在的笔记本电脑，厂家一般都会换热键功能，做一些快捷键的使用。它在一定程度上帮助了我们，但是很多软件的快捷功能是架设在原系统热键的基础上的。厂家修改过后，再次使用原热键功能，像我的宏碁传奇 X 就需要配合 Fn 进行使用，对于我这类手小巧的孩子是不适合的。
 
 ## 应该怎么恢复呢？
@@ -15,17 +13,17 @@ date: 2021-09-15
 
 - 首先，重启电脑，长按 F2 进入 BISO 界面。如图:
 
-![bios首页](https://cdn.jsdelivr.net/gh/zihanla/cdn/tk/2021/9/15/bios%E9%A1%B5%E9%9D%A2.jpg)
+![bios首页](https://image.hyx.ink/2024/11/bf912085b7a8f993864e5e15af7c1037.webp)
 
 - 然后咱们通过键盘向右移动到 Main 页面，找到 function key behavior 一栏，回车。如图:
 
-![切换热键](https://cdn.jsdelivr.net/gh/zihanla/cdn/tk/2021/9/15/%E6%9B%B4%E6%94%B9%E7%83%AD%E9%94%AE.jpg)
+![切换热键](https://image.hyx.ink/2024/11/03846b66dfcec43af4eac695a860f613.webp)
 
 这样就修改完成了！
 
 - 再按 F10 进入如图界面:
 
-![确认修改](https://cdn.jsdelivr.net/gh/zihanla/cdn/tk/2021/9/15/%E4%BF%9D%E5%AD%98%E9%80%80%E5%87%BAbios%E7%95%8C%E9%9D%A2.jpg)
+![确认修改](https://image.hyx.ink/2024/11/58a95c12aaa4979d79e4fafbaba87fd0.webp)
 
 回车等待重启就好了。
 
