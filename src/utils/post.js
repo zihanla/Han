@@ -39,6 +39,19 @@ function createRenderer(hasCodeBlock = false) {
 
   const renderer = new marked.Renderer();
 
+  renderer.link = (href, title, text) => {
+    // 处理新版本 marked 的对象格式
+    if (typeof href === 'object') {
+      const linkData = href;
+      return `<a target="_blank" rel="noopener noreferrer" href="${linkData.href}">${linkData.text}</a>`;
+    }
+    
+    // 处理旧版本格式（虽然看起来现在不会走到这个分支）
+    const url = href || '';
+    const content = text || '';
+    return `<a target="_blank" rel="noopener noreferrer" href="${url}">${content}</a>`;
+  };
+
   if (hasCodeBlock) {
     renderer.code = function (code, language) {
       try {
@@ -211,8 +224,8 @@ export async function processMarkdownFile(filePath, template) {
       )
       .replace(/\$yearRange\$/g, BLOG_CONFIG.yearRange)
       .replace(/\$blog_title\$/g, BLOG_CONFIG.title) // 博客标题
-      .replace("$body$", html)
-      .replace(/\$analytics\$/g, BLOG_CONFIG.analytics); // 百度统计代码
+      .replace("$body$", html);
+
     return {
       ...meta,
       content: markdown,

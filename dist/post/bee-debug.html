@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta content="blog, 涵有闲, Han, 碎片生活, note, 个人博客, 生活记录" name="keywords" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="> 借助 bee 命令行工具的热编译功能，结果无法找到命令 bee 命令，还好我面向搜索引擎... bee 是用来进行 beego 项目(普通项目也可以使用)的创建、热编译、开发、测试、和部署的工具。 我是按照 bee..." />
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <link rel="stylesheet" href="/static/style.css" />
+    <title>bee工具踩坑</title>
+  </head>
+  <body id="top">
+    <a href="#top" class="back-to-top" aria-label="返回顶部">↑</a>
+    <header class="site-header">
+      <div class="site-title">
+        <a href="/">涵有闲</a>
+      </div>
+      <nav class="site-nav">
+        <a href="/about#now">现在</a>
+        <a href="/journals">碎语</a>
+        <a href="/about">关于</a>
+      </nav>
+    </header>
+
+    <article>
+      <header class="post-header">
+        <h1>bee工具踩坑</h1>
+        <div class="post-meta">
+          <span>子涵</span>
+          <span class="separator">·</span>
+          <span>2022-10-01</span>
+        </div>
+      </header>
+      <div class="post-content"><blockquote>
+<p>借助 bee 命令行工具的热编译功能，结果无法找到命令 bee 命令，还好我面向搜索引擎...</p>
+</blockquote>
+<p>bee 是用来进行 beego 项目(普通项目也可以使用)的创建、热编译、开发、测试、和部署的工具。</p>
+<p>我是按照 bee 官方文档进行部署的，pkg 中有 beego 包的，结果输入 bee 无法找到命令，索性搜索引擎提供了解决方案。</p>
+<pre><code class="hljs language-go"><span class="hljs-comment">// 通过 go env 找到path路径 进入 pkg\mod\github.com\beego\bee\vx@vx.x.x</span>
+<span class="hljs-comment">// 在vx@vx.x.x目录下 打开终端 依次输入以下命令 对bee进行编译</span>
+	<span class="hljs-keyword">go</span> mod tidy  <span class="hljs-comment">// 整理bee文件</span>
+	<span class="hljs-keyword">go</span> install <span class="hljs-comment">// 编译bee</span>
+</code></pre><p>编译后只要配置过 gopath ，就可以在任意位置使用 bee 工具了。</p>
+</div>
+    </article>
+    <footer>
+      <span>© 2021-2024 子涵</span>
+      <a href="/feed">订阅</a>
+    </footer>
+    $analytics$
+  </body>
+</html>

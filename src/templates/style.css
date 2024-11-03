@@ -117,6 +117,7 @@ footer a:hover {
   transition: background-color 0.2s ease, padding 0.2s ease;
 }
 
+
 .post-list li:hover {
   background-color: var(--bg-light);
   padding-left: 0.5rem;

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta content="blog, 涵有闲, Han, 碎片生活, note, 个人博客, 生活记录" name="keywords" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="> nvm 允许不同版本 node 共存并切换 我主要用于解决拉取的项目，包与 node 版本之间的冲突 nvm-setup 清空电脑上之前的 node 后，无脑下一步，注意 nvm 和 node 的安装位置，忘记了可以去环境变量里找..." />
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <link rel="stylesheet" href="/static/style.css" />
+    <title>使用nvm管理node版本</title>
+  </head>
+  <body id="top">
+    <a href="#top" class="back-to-top" aria-label="返回顶部">↑</a>
+    <header class="site-header">
+      <div class="site-title">
+        <a href="/">涵有闲</a>
+      </div>
+      <nav class="site-nav">
+        <a href="/about#now">现在</a>
+        <a href="/journals">碎语</a>
+        <a href="/about">关于</a>
+      </nav>
+    </header>
+
+    <article>
+      <header class="post-header">
+        <h1>使用nvm管理node版本</h1>
+        <div class="post-meta">
+          <span>子涵</span>
+          <span class="separator">·</span>
+          <span>2022-12-16</span>
+        </div>
+      </header>
+      <div class="post-content"><blockquote>
+<p>nvm 允许不同版本 node 共存并切换</p>
+</blockquote>
+<p>我主要用于解决拉取的项目，包与 node 版本之间的冲突</p>
+<h3>下载</h3>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/coreybutler/nvm-windows/releases">nvm-setup</a></p>
+<h3>安装</h3>
+<p>清空电脑上之前的 node 后，无脑下一步，注意 nvm 和 node 的安装位置，忘记了可以去环境变量里找 NVM_HOME、NVM_SYMLINK</p>
+<h3>设置源</h3>
+<p>去 nvm 的安装位置找到 settings.txt，在后面添加源</p>
+<pre><code class="hljs language-bash">node_mirror: https://npm.taobao.org/mirrors/node/
+npm_mirror: https://npm.taobao.org/mirrors/npm/6
+</code></pre><p>npm 的源可以用 nrm 管理：<a target="_blank" rel="noopener noreferrer" href="https://hyx.ink/13">npm 日常笔记</a></p>
+<h3>使用</h3>
+<pre><code class="hljs language-bash">// 查看版本
+nvm -v
+// 显示可安装的node版本
+nvm list available
+// 安装指定版本node
+nvm install 版本号
+// 卸载指定版本的node
+nvm uninstall 版本号
+// 切换指定版本node
+mvm use 版本号
+</code></pre></div>
+    </article>
+    <footer>
+      <span>© 2021-2024 子涵</span>
+      <a href="/feed">订阅</a>
+    </footer>
+    $analytics$
+  </body>
+</html>
