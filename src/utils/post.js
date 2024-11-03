@@ -224,6 +224,7 @@ export async function processMarkdownFile(filePath, template) {
       )
       .replace(/\$yearRange\$/g, BLOG_CONFIG.yearRange)
       .replace(/\$blog_title\$/g, BLOG_CONFIG.title) // 博客标题
+      .replace("$analytics$", BLOG_CONFIG.analytics) // 百度统计 $analytics$
       .replace("$body$", html);
 
     return {
