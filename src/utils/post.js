@@ -39,6 +39,32 @@ function createRenderer(hasCodeBlock = false) {
 
   const renderer = new marked.Renderer();
 
+  // 修改链接处理
+  renderer.link = function(href, title, text) {
+    if (typeof href === 'object') {
+      console.warn('链接href是对象:', href);
+      href = '';
+    }
+    
+    // 确保 href 和 text 都是字符串
+    const linkHref = String(href || '');
+    const linkText = String(text || '');
+    
+    // 检查是否是外部链接
+    const isExternal = /^https?:\/\//.test(linkHref);
+    
+    // 构建属性
+    const attrs = [
+      `href="${linkHref}"`,
+      isExternal ? 'target="_blank"' : '',
+      isExternal ? 'rel="noopener noreferrer"' : '',
+      title ? `title="${title}"` : ''
+    ].filter(Boolean).join(' ');
+
+    return `<a ${attrs}>${linkText}</a>`;
+  };
+
+  // 保持原有的代码块处理逻辑
   if (hasCodeBlock) {
     renderer.code = function (code, language) {
       try {
@@ -182,9 +208,59 @@ export async function processMarkdownFile(filePath, template) {
       await initializeHighlight();
     }
 
+    // 创建渲染器
+    const renderer = new marked.Renderer();
+
+    // 配置链接渲染
+    renderer.link = function(href, title, text) {
+      // 确保 href 是字符串
+      const linkHref = String(href || '');
+      // 检查是否是外部链接
+      const isExternal = /^https?:\/\//.test(linkHref);
+      
+      // 构建属性
+      const attrs = [
+        `href="${linkHref}"`,
+        // 只有外部链接才在新标签页打开
+        isExternal ? 'target="_blank"' : '',
+        isExternal ? 'rel="noopener noreferrer"' : '',
+        // 如果有title属性，添加title
+        title ? `title="${title}"` : ''
+      ].filter(Boolean).join(' ');
+
+      return `<a ${attrs}>${text}</a>`;
+    };
+
+    // 配置代码块渲染
+    if (hasCodeBlock) {
+      renderer.code = function (code, language) {
+        try {
+          // 处理代码块内容
+          const codeText = String(code || "");
+          
+          // 如果代码块为空，返回空的高亮块
+          if (!codeText.trim()) {
+            return '<pre><code class="hljs"></code></pre>';
+          }
+
+          // 使用指定的语言进行高亮
+          const result = language && hljs
+            ? hljs.default.highlight(codeText, { language })
+            : hljs.default.highlightAuto(codeText);
+
+          return `<pre><code class="hljs language-${language || result.language}">${
+            result.value
+          }</code></pre>`;
+        } catch (err) {
+          console.error("代码高亮失败:", err);
+          return `<pre><code class="hljs">${String(code)}</code></pre>`;
+        }
+      };
+    }
+
     // 配置 marked
     const markedOptions = {
-      renderer: createRenderer(hasCodeBlock),
+      renderer,
       gfm: true,
       breaks: true,
       headerIds: false,
@@ -242,7 +318,7 @@ function generateExcerpt(markdown, maxLength = 120) {
       return plainText;
     }
 
-    // 智能截取，避免在单词中间截断
+    // 智能截取���避免在单词中间截断
     let excerpt = plainText.slice(0, maxLength);
     const lastSpace = excerpt.lastIndexOf(" ");
 
