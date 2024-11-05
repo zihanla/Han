@@ -1,5 +1,16 @@
 {
     "outputDirectory": "dist",
     "framework": null,
-    "cleanUrls": true
+    "cleanUrls": true,
+    "headers": [
+        {
+            "source": "/feed",
+            "headers": [
+                {
+                    "key": "Content-Type",
+                    "value": "application/xml; charset=utf-8"
+                }
+            ]
+        }
+    ]
 }
