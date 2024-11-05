@@ -52,7 +52,11 @@ date: "2021-8-20 17:30"
 
 > 记录一些博主
 
-[墨雪飘影](https://blog.shikangsi.cn)、[gq's blog](https://zgq.ink)、[雅余](https://yayu.net/)、[云烟成雨](https://shiyu.dev/)
+- [LINUX DO](https://linux.do/) - 开放的理想社区
+- [墨雪飘影](https://blog.shikangsi.cn)
+- [gq's blog](https://zgq.ink)
+- [雅余](https://yayu.net/)
+- [云烟成雨](https://shiyu.dev/)
 
 ## 博客组织
 
