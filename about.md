@@ -54,6 +54,7 @@ date: "2021-8-20 17:30"
 
 - [LINUX DO](https://linux.do/) - 开放的理想社区
 - [墨雪飘影](https://blog.shikangsi.cn)
+- [崔话记](https://cuixiping.com/)
 - [gq's blog](https://zgq.ink)
 - [雅余](https://yayu.net/)
 - [云烟成雨](https://shiyu.dev/)
