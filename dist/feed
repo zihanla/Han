@@ -4,11 +4,18 @@
         <title>涵有闲</title>
         <link>https://hyx.ink</link>
         <description>动起来就好，想做就去做吧。涵有闲博客，记录生活点滴，分享生活感悟。</description>
-        <lastBuildDate>Mon, 04 Nov 2024 09:15:45 GMT</lastBuildDate>
+        <lastBuildDate>Fri, 16 May 2025 01:04:31 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>zh-CN</language>
         <atom:link href="https://hyx.ink/feed" rel="self" type="application/rss+xml"/>
+        <item>
+            <title><![CDATA[记我这波折的半年]]></title>
+            <link>https://hyx.ink/post/ji-wo-zhe-bo-zhe-de-ban-nian</link>
+            <guid>https://hyx.ink/post/ji-wo-zhe-bo-zhe-de-ban-nian</guid>
+            <pubDate>Fri, 16 May 2025 01:04:00 GMT</pubDate>
+            <description><![CDATA[时间匆匆，恍惚间半年已经过去了，忙碌着，拖延着，回过头好像是做梦般 24年底，准备去苏家里拜访，毕竟年岁不小了，在一起也好几年了，是该见见家长了 本来准备一个人去的，苏的父亲说，要带回来就把父母也带过来，于是乎先去了父母那边，挑选见面礼，等...]]></description>
+        </item>
         <item>
             <title><![CDATA[大理昆明小游库存]]></title>
             <link>https://hyx.ink/post/da-li-kun-ming-xiao-you-kucun</link>
