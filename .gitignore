@@ -1,2 +1,4 @@
 # 忽略依赖
 node_modules/
+.snow/
+*.snow
