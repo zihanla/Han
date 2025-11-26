@@ -5,6 +5,7 @@
   "description": "子涵的个人博客",
   "scripts": {
     "build": "node src/index.js",
+    "dev": "node src/utils/watch.js",
     "d": "pnpm build && git add . && git commit -m \"update blog\" && git push"
   },
   "keywords": [],
@@ -20,5 +21,8 @@
     "pinyin": "^2.11.2",
     "terser": "^5.36.0",
     "turndown": "^7.2.0"
+  },
+  "devDependencies": {
+    "browser-sync": "^3.0.3"
   }
 }

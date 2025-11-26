@@ -28,7 +28,7 @@ import {
   getAllSourceFiles,
   shouldRebuildArticles,
   shouldRebuildJournals,
-} from "./build-deps.js";
+} from "./utils/build-deps.js";
 
 // 清理旧文件
 async function cleanupOldFiles(existingHtmlFiles, outputDir) {
@@ -317,26 +317,6 @@ async function handleJournals(
 
     // 如果需要重建或内容有变化，重新生成页面
     if (needsRebuild || hasChanges) {
-      // 根据不同情况输出日志
-      if (journalTemplateChanged) {
-        console.log("\n📝 碎语模板发生变化，重新生成碎语页面...");
-      } else if (!outputExists) {
-        console.log("\n📝 生成碎语页面...");
-      } else if (hasChanges) {
-        switch (changeType) {
-          case "added":
-            console.log("\n✨ 新增碎语，重新生成碎语页面...");
-            break;
-          case "deleted":
-          case "modified":
-            console.log("\n📝 碎语内容已更新，重新生成碎语页面...");
-            break;
-          case "init":
-            console.log("\n📝 初始化碎语页面...");
-            break;
-        }
-      }
-
       // 生成并写入HTML
       const html = await generateJournalsHtml(journalsData);
       await fs.writeFile(outputPath, html);
@@ -364,7 +344,7 @@ async function handleJournals(
  * 4. 生成首页和 RSS
  * 5. 保存构建缓存
  */
-async function buildSite() {
+export async function buildSite() {
   try {
     // 1. 创建输出目录
     await createDirectories();
@@ -454,4 +434,7 @@ async function buildSite() {
   }
 }
 
-buildSite();
+// 只在直接运行时执行构建
+if (import.meta.url === `file://${process.argv[1].replace(/\\/g, "/")}`) {
+  buildSite();
+}

@@ -41,14 +41,14 @@ function createRenderer(hasCodeBlock = false) {
 
   renderer.link = (href, title, text) => {
     // 处理新版本 marked 的对象格式
-    if (typeof href === 'object') {
+    if (typeof href === "object") {
       const linkData = href;
       return `<a target="_blank" rel="noopener noreferrer" href="${linkData.href}">${linkData.text}</a>`;
     }
-    
+
     // 处理旧版本格式（虽然看起来现在不会走到这个分支）
-    const url = href || '';
-    const content = text || '';
+    const url = href || "";
+    const content = text || "";
     return `<a target="_blank" rel="noopener noreferrer" href="${url}">${content}</a>`;
   };
 
