@@ -1,3 +1,19 @@
+/**
+ * 博客静态站点构建器 - 主入口文件
+ *
+ * 功能：
+ * 1. 增量构建 - 只重建变化的文件
+ * 2. 依赖追踪 - 源文件变化自动触发相关内容重建
+ * 3. 资源优化 - 压缩 CSS/JS
+ * 4. 多内容类型 - 支持文章、碎语、关于页面
+ *
+ * 构建流程：
+ * 1. 检查源文件变化（模板、配置、工具模块）
+ * 2. 根据依赖关系决定需要重建的内容
+ * 3. 处理各类内容（文章、碎语、关于页面）
+ * 4. 生成首页和 RSS
+ * 5. 保存构建缓存
+ */
 import fs from "fs/promises";
 import path from "path";
 import CleanCSS from "clean-css";
@@ -7,6 +23,12 @@ import { processMarkdownFile, getPostBasicInfo } from "./utils/post.js";
 import { generateFeed } from "./utils/feed.js";
 import { generateIndexHtml } from "./templates/index.js";
 import { processJournals, generateJournalsHtml } from "./utils/journals.js";
+import { PATHS } from "./config.js";
+import {
+  getAllSourceFiles,
+  shouldRebuildArticles,
+  shouldRebuildJournals,
+} from "./build-deps.js";
 
 // 清理旧文件
 async function cleanupOldFiles(existingHtmlFiles, outputDir) {
@@ -62,75 +84,66 @@ async function createDirectories() {
   await Promise.all(dirs.map((dir) => fs.mkdir(dir, { recursive: true })));
 }
 
-// 检查模板文件变化
-async function checkTemplateChanges(buildHashes = {}) {
+/**
+ * 检查源文件变化
+ *
+ * 追踪所有会影响构建结果的源文件：
+ * - 配置文件（config.js）
+ * - 模板文件（HTML/CSS）
+ * - 工具模块（utils/*.js）
+ *
+ * 关键改进：完整的依赖追踪
+ * - 之前只追踪模板，现在追踪所有源文件
+ * - 修改任何源文件都会正确触发重建
+ *
+ * @param {Object} buildHashes - 上次构建的哈希记录
+ * @returns {Object} 变化的文件信息
+ */
+async function checkSourceChanges(buildHashes = {}) {
+  const changedFiles = [];
   const newHashes = {};
-  // 将模板文件分组
-  const commonTemplates = [
-    "./src/templates/page.html", // 文章模板
-    "./src/templates/index.js", // 首页模板
-    "./src/templates/style.css", // 样式文件
-  ];
 
-  const journalTemplate = "./src/templates/journals.html"; // 碎语模板单独处理
+  // 获取所有需要追踪的源文件
+  const sourceFiles = getAllSourceFiles();
 
-  let commonTemplatesChanged = false;
-  let journalTemplateChanged = false;
+  // 检查每个源文件是否变化
+  for (const file of sourceFiles) {
+    try {
+      const currentHash = await calculateHash(file);
+      const previousHash = buildHashes[file];
 
-  // 检查普通模板
-  for (const file of commonTemplates) {
-    const currentHash = await calculateHash(file);
-    if (!buildHashes[file] || buildHashes[file] !== currentHash) {
-      newHashes[file] = currentHash;
-      commonTemplatesChanged = true;
+      // 文件变化或首次构建
+      if (!previousHash || previousHash !== currentHash) {
+        changedFiles.push(file);
+        newHashes[file] = currentHash;
+      }
+    } catch (error) {
+      // 文件可能不存在或无法读取，跳过
+      console.warn(`无法读取源文件 ${file}:`, error.message);
     }
   }
 
-  // 单独检查碎语模板
-  const journalHash = await calculateHash(journalTemplate);
-  if (
-    !buildHashes[journalTemplate] ||
-    buildHashes[journalTemplate] !== journalHash
-  ) {
-    newHashes[journalTemplate] = journalHash;
-    journalTemplateChanged = true;
-  }
-
+  // 根据变化的文件判断需要重建的内容
   return {
-    hashes: newHashes,
-    commonChanged: commonTemplatesChanged,
-    journalChanged: journalTemplateChanged,
+    changedFiles,
+    newHashes,
+    needRebuildArticles: shouldRebuildArticles(changedFiles),
+    needRebuildJournals: shouldRebuildJournals(changedFiles),
   };
 }
 
-// 处理静态文件
-async function handleStaticFiles(buildHashes = {}) {
+/**
+ * 处理静态文件
+ *
+ * 职责：复制并压缩 CSS 文件到输出目录
+ * 注意：不再处理缓存清理逻辑（已移到主构建函数）
+ */
+async function handleStaticFiles() {
   try {
-    // 1. 首先检查模板文件变化
-    const templateResult = await checkTemplateChanges(buildHashes);
-
-    // 2. 如果普通模板发生变化，清除所有文章的构建缓存
-    if (templateResult.commonChanged) {
-      console.log("\n模板文件发生变化，将重新构建所有文章...");
-      for (const key of Object.keys(buildHashes)) {
-        if (key.includes("/content/") || key === "./about.md") {
-          delete buildHashes[key];
-        }
-      }
-    }
-
-    // 3. 复制模板样式文件到静态目录
     await copyAndMinifyFile(
-      "./src/templates/style.css",
-      "./dist/static/style.css"
+      PATHS.templateStyle,
+      `${PATHS.distStatic}/style.css`
     );
-
-    // 4. 返回哈希值和变化状态
-    return {
-      hashes: templateResult.hashes,
-      commonChanged: templateResult.commonChanged,
-      journalChanged: templateResult.journalChanged,
-    };
   } catch (error) {
     console.error("静态文件处理失败:", error);
     throw error;
@@ -341,68 +354,97 @@ async function handleJournals(
   }
 }
 
-// 主构建函数
+/**
+ * 主构建函数
+ *
+ * 构建流程：
+ * 1. 检查源文件变化（配置、模板、工具模块）
+ * 2. 根据依赖关系清理缓存
+ * 3. 并行处理各类内容
+ * 4. 生成首页和 RSS
+ * 5. 保存构建缓存
+ */
 async function buildSite() {
   try {
-    // 1. 创建目录结构
+    // 1. 创建输出目录
     await createDirectories();
 
-    // 2. 读取构建哈希
+    // 2. 读取上次构建的哈希记录
     const buildHashes = await readBuildHash();
 
-    // 3. 获取当前所有markdown文件的路径
-    const files = await fs.readdir("./content");
-    const currentFiles = new Set(files.map((file) => `./content/${file}`));
+    // 3. 检查源文件变化（关键改进：完整的依赖追踪）
+    const sourceChanges = await checkSourceChanges(buildHashes);
 
-    // 4. 清理已删除文件的哈希值
-    const cleanedHashes = {};
+    // 如果源文件有变化，清理受影响内容的缓存
+    let cleanedHashes = { ...buildHashes };
+    if (sourceChanges.needRebuildArticles) {
+      console.log("\n源文件变化，将重新构建所有文章...");
+      // 清除所有文章和about页面的缓存
+      for (const key of Object.keys(cleanedHashes)) {
+        if (key.includes("/content/") || key === PATHS.about) {
+          delete cleanedHashes[key];
+        }
+      }
+    }
+
+    // 4. 清理已删除文章的哈希记录
+    const files = await fs.readdir(PATHS.content);
+    const currentFiles = new Set(
+      files.map((file) => `${PATHS.content}/${file}`)
+    );
     let hasDeletedFiles = false;
-    for (const [key, value] of Object.entries(buildHashes)) {
-      if (!key.includes("/content/") || currentFiles.has(key)) {
-        cleanedHashes[key] = value;
-      } else {
-        console.log(`\n清理已删除文章的哈希记录: ${key}`);
+
+    for (const key of Object.keys(cleanedHashes)) {
+      if (key.includes("/content/") && !currentFiles.has(key)) {
+        console.log(`清理已删除文章: ${key}`);
+        delete cleanedHashes[key];
         hasDeletedFiles = true;
       }
     }
 
     // 5. 并行处理静态文件、文章和关于页面
-    const [staticResult, postsResult, aboutResult] = await Promise.all([
-      handleStaticFiles(cleanedHashes),
+    const [, postsResult, aboutResult] = await Promise.all([
+      handleStaticFiles(),
       handlePosts(cleanedHashes),
       handleAboutPage(cleanedHashes),
     ]);
 
-    // 6. 处理碎语（只传入碎语模板的变化状态）
+    // 6. 处理碎语页面
     const journalsResult = await handleJournals(
       cleanedHashes,
-      staticResult.journalChanged
+      sourceChanges.needRebuildJournals
     );
 
-    // 7. 合并所有哈希值
-    const newHashes = {
-      ...cleanedHashes,
-      ...staticResult.hashes,
-      ...postsResult.newHashes,
-      ...(aboutResult?.hash ? { "./about.md": aboutResult.hash } : {}),
-      ...(journalsResult?.hash
-        ? { "./journals.json": journalsResult.hash }
-        : {}),
-    };
+    // 7. 合并所有哈希值（简化逻辑）
+    const newHashes = { ...cleanedHashes };
+
+    // 添加源文件哈希
+    Object.assign(newHashes, sourceChanges.newHashes);
+
+    // 添加文章哈希
+    Object.assign(newHashes, postsResult.newHashes);
+
+    // 添加关于页面哈希
+    if (aboutResult?.hash) {
+      newHashes[PATHS.about] = aboutResult.hash;
+    }
+
+    // 添加碎语哈希
+    if (journalsResult?.hash) {
+      newHashes[PATHS.journals] = journalsResult.hash;
+    }
 
     // 8. 按日期排序文章
     const sortedPosts = postsResult.posts.sort((a, b) => {
       return new Date(b.date) - new Date(a.date);
     });
 
-    // 检查是否有文章变化（新增、修改、删除）
+    // 9. 生成首页和 RSS（文章变化时更新 RSS）
     const hasPostChanges =
-      Object.keys(postsResult.newHashes).length > 0 || hasDeletedFiles; // 使用 hasDeletedFiles 标记
-
-    // 生成站点文件，传入文章变化状态
+      Object.keys(postsResult.newHashes).length > 0 || hasDeletedFiles;
     await generateSiteFiles(sortedPosts, hasPostChanges);
 
-    // 9. 保存新的哈希值
+    // 10. 保存新的哈希记录
     await saveBuildHash(newHashes);
 
     console.log("\n✨ 构建完成！");

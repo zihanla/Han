@@ -1,5 +1,8 @@
+// ============================================================
+// 博客配置
+// ============================================================
+
 export const BLOG_URL = "https://hyx.ink";
-export const HASH_FILE = "./.build-hash.json";
 
 // 计算年份范围
 const startYear = 2021;
@@ -9,7 +12,8 @@ const yearRange = `${startYear}-${currentYear}`;
 export const BLOG_CONFIG = {
   title: "涵有闲",
   author: "子涵",
-  description: "动起来就好，想做就去做吧。涵有闲博客，记录生活点滴，分享生活感悟。",
+  description:
+    "动起来就好，想做就去做吧。涵有闲博客，记录生活点滴，分享生活感悟。",
   language: "zh-CN",
   keywords: "blog, 涵有闲, Han, 碎片生活, note, 个人博客, 生活记录",
   email: "im.zihanla@gmail.com",
@@ -26,5 +30,36 @@ export const BLOG_CONFIG = {
       s.parentNode.insertBefore(hm, s);
     })();
     </script>
-  `
+  `,
 };
+
+// ============================================================
+// 路径配置 - 集中管理所有文件路径
+// ============================================================
+
+export const PATHS = {
+  // 内容目录
+  content: "./content",
+  about: "./about.md",
+  journals: "./journals.json",
+  journalsMd: "./journals.md",
+
+  // 输出目录
+  dist: "./dist",
+  distPost: "./dist/post",
+  distStatic: "./dist/static",
+  distIndex: "./dist/index.html",
+  distAbout: "./dist/about.html",
+  distJournals: "./dist/journals.html",
+  distFeed: "./dist/feed",
+
+  // 模板文件
+  templatePage: "./src/templates/page.html",
+  templateStyle: "./src/templates/style.css",
+  templateJournals: "./src/templates/journals.html",
+
+  // 构建缓存
+  buildHash: "./.build-hash.json",
+};
+
+export const HASH_FILE = PATHS.buildHash;

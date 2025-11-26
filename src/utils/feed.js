@@ -1,16 +1,48 @@
 /**
- * 生成博客的 RSS feed
- * 可以让用户订阅博客,在阅读器中接收更新
+ * RSS feed 生成模块
+ *
+ * 作用：生成符合 RSS 2.0 标准的订阅源
+ *
+ * 注意：RSS 日期使用 ISO 8601 格式，RSS 阅读器会自动处理时区
  */
 import { Feed } from "feed";
 import { BLOG_CONFIG, BLOG_URL } from "../config.js";
 
-// 转换为中国时区的时间
-function toChineseTime(date) {
-  const utcDate = new Date(date.getTime() + 8 * 60 * 60 * 1000); // 加8小时
-  return utcDate;
+/**
+ * 解析文章日期字符串为 Date 对象
+ * 支持格式：
+ * - "2024-11-26" → 2024-11-26 00:00:00 (北京时间)
+ * - "2024-11-26 14:30" → 2024-11-26 14:30:00 (北京时间)
+ *
+ * @param {string|Date} dateStr - 日期字符串或 Date 对象
+ * @returns {Date} Date 对象
+ */
+function parseDate(dateStr) {
+  if (dateStr instanceof Date) {
+    return dateStr;
+  }
+
+  if (typeof dateStr === "string") {
+    // "2024-11-26" 格式 - 使用北京时间 00:00:00
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+      return new Date(`${dateStr}T00:00:00+08:00`);
+    }
+
+    // "2024-11-26 14:30" 格式 - 使用北京时间
+    if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/.test(dateStr)) {
+      return new Date(`${dateStr.replace(" ", "T")}:00+08:00`);
+    }
+  }
+
+  // 其他格式，尝试直接转换
+  return new Date(dateStr);
 }
 
+/**
+ * 生成 RSS feed
+ * @param {Array} posts - 文章列表
+ * @returns {string} RSS XML 字符串
+ */
 export async function generateFeed(posts) {
   const feed = new Feed({
     title: BLOG_CONFIG.title,
@@ -18,7 +50,7 @@ export async function generateFeed(posts) {
     id: BLOG_URL,
     link: BLOG_URL,
     language: "zh-CN",
-    updated: toChineseTime(new Date()),
+    updated: new Date(), // feed 库会自动处理时区
     feedLinks: {
       rss: `${BLOG_URL}/feed`,
     },
@@ -27,27 +59,16 @@ export async function generateFeed(posts) {
     },
   });
 
-  // 遍历所有文章,将每篇文章添加到 feed 中
+  // 添加文章到 feed
   posts.forEach((post) => {
-    let date;
-    if (typeof post.date === "string") {
-      if (/^\d{4}-\d{2}-\d{2}$/.test(post.date)) {
-        // 纯日期格式，使用北京时间 08:00:00
-        date = new Date(`${post.date}T08:00:00+08:00`);
-      } else if (post.date.includes(":")) {
-        // 带时间的格式，添加时区信息
-        date = new Date(`${post.date.replace(" ", "T")}:00+08:00`);
-      }
-    } else {
-      date = new Date(post.date);
-    }
+    const date = parseDate(post.date);
 
     feed.addItem({
       title: post.title,
       id: `${BLOG_URL}${post.url}`,
       link: `${BLOG_URL}${post.url}`,
       description: post.description,
-      date: toChineseTime(date), // 转换为中国时区
+      date: date, // feed 库会自动转换为 RFC 822 格式
       author: [{ name: post.author, email: BLOG_CONFIG.email }],
     });
   });
