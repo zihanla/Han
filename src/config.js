@@ -12,6 +12,7 @@ export const BLOG_CONFIG = {
   description: "动起来就好，想做就去做吧。涵有闲博客，记录生活点滴，分享生活感悟。",
   language: "zh-CN",
   keywords: "blog, 涵有闲, Han, 碎片生活, note, 个人博客, 生活记录",
+  email: "im.zihanla@gmail.com",
   yearRange,
   analytics: `
     <!-- 百度统计 -->
