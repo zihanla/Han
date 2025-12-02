@@ -1,6 +1,7 @@
 import fs from "fs/promises";
 import { marked } from "marked";
 import { BLOG_CONFIG } from "../config.js";
+import { formatDate } from "./date.js";
 
 /**
  * 处理碎语内容
@@ -28,9 +29,10 @@ export async function processJournals() {
       // 如果有新内容要添加
       if (content.trim()) {
         const date = new Date();
-        const formattedDate = `${date.getFullYear()}-${String(
+        // 保存时保留完整时间，展示时再格式化
+        const formattedDate = `${date.getFullYear()}/${String(
           date.getMonth() + 1
-        ).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")} ${String(
+        ).padStart(2, "0")}/${String(date.getDate()).padStart(2, "0")} ${String(
           date.getHours()
         ).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
 
@@ -83,14 +85,18 @@ export async function generateJournalsHtml(journalsData) {
 
   if (!journals?.length) return null;
 
-  // 生成HTML，在这里渲染 Markdown
+  // 生成HTML，在这里渲染 Markdown - 使用简洁风格
   const journalsHtml = journals
     .map(
       (journal) => `
-    <div class="journal-item">
-      <div class="journal-date">${journal.date}</div>
-      <div class="journal-content">${marked(journal.content)}</div>
-    </div>
+    <article id="j-${new Date(journal.date).getTime()}" class="journal-item">
+      <div class="journal-content">
+        ${marked(journal.content)}
+      </div>
+      <div class="journal-meta">
+        <span class="journal-date">${formatDate(journal.date)}</span>
+      </div>
+    </article>
   `
     )
     .join("");
@@ -103,13 +109,6 @@ export async function generateJournalsHtml(journalsData) {
     .replace(/\$keywords\$/g, BLOG_CONFIG.keywords)
     .replace(/\$yearRange\$/g, BLOG_CONFIG.yearRange)
     .replace(/\$author\$/g, BLOG_CONFIG.author)
-    .replace(
-      "$body$",
-      `
-      <div class="journal-items">
-        ${journalsHtml}
-      </div>
-    `
-    )
+    .replace("$body$", journalsHtml)
     .replace(/\$analytics\$/g, BLOG_CONFIG.analytics); // 百度统计代码
 }

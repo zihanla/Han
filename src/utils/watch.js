@@ -81,7 +81,7 @@ export async function startWatch() {
     server: {
       baseDir: "./dist",
       serveStaticOptions: {
-        extensions: ["html"], // 🔑 Clean URLs：/journals 自动加载 /journals.html
+        extensions: ["html"], // 🔑 Clean URLs：/archive 自动加载 /archive.html
       },
     },
     port: PORT,

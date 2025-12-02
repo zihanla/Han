@@ -2,36 +2,27 @@
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <meta content="blog, 涵有闲, Han, 碎片生活, note, 个人博客, 生活记录" name="keywords" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="> 使用 TailWind CSS，新建项目 tailwindcss 通过 npm 安装，并创建您的 tailwind.config.js 文件 用以下配置覆盖 tailwind.config.js 文件中的配置(实现 src 下的..." />
+    <meta name="keywords" content="blog, 涵有闲, Han, 碎片生活, note, 个人博客, 生活记录" />
+    <meta name="author" content="子涵" />
     <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
     <link rel="stylesheet" href="/static/style.css" />
-    <title>使用TailWind CSS新建项目</title>
+    <title>使用TailWind CSS新建项目 - 涵有闲</title>
   </head>
   <body id="top">
-    <a href="#top" class="back-to-top" aria-label="返回顶部">↑</a>
-    <header class="site-header">
-      <div class="site-title">
-        <a href="/">涵有闲</a>
-      </div>
-      <nav class="site-nav">
-        <a href="/about#now">现在</a>
-        <a href="/journals">碎语</a>
-        <a href="/about">关于</a>
-      </nav>
-    </header>
-
-    <article>
-      <header class="post-header">
-        <h1>使用TailWind CSS新建项目</h1>
-        <div class="post-meta">
-          <span>子涵</span>
-          <span class="separator">·</span>
-          <span>2022-09-24</span>
-        </div>
+    <div class="main-container">
+      <header class="site-header">
+        <a href="/" class="back-link">⟵ 涵有闲的博客</a>
       </header>
-      <div class="post-content"><blockquote>
+
+      <main>
+        <article>
+          <header class="post-header">
+            <h2 class="post-title">使用TailWind CSS新建项目</h2>
+            <div class="post-meta">2022/09/24</div>
+          </header>
+          <div class="post-content"><blockquote>
 <p>使用 TailWind CSS，新建项目</p>
 </blockquote>
 <h2>安装 Tailwind CSS</h2>
@@ -71,11 +62,16 @@ npx tailwindcss init
 <h2>声明</h2>
 <p>原创：<a target="_blank" rel="noopener noreferrer" href="https://wyz.xyz/d/306-tailwind-30tailwind-css/3">乌鸦嘴</a></p>
 </div>
-    </article>
-    <footer>
-      <span>© 2021-2025 子涵</span>
-      <a href="/feed">订阅</a>
-    </footer>
+        </article>
+      </main>
+
+      <footer class="site-footer">
+        <span>© 2021-2025 子涵</span>
+        <span style="margin: 0 0.5rem">·</span>
+        <a href="/feed">订阅</a>
+      </footer>
+    </div>
+
     
     <!-- 百度统计 -->
     <script>

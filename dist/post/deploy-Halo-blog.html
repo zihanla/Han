@@ -2,36 +2,27 @@
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <meta content="blog, 涵有闲, Han, 碎片生活, note, 个人博客, 生活记录" name="keywords" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="- 2023.4.11 使用 notion + nobelium + vercel 的形式部署博客 - 2022.12.30 halo 博客 2.0 时代了，不大喜欢了，转回 typecho,目前教程仅对 halo1.5 及以下生效。 >..." />
+    <meta name="keywords" content="blog, 涵有闲, Han, 碎片生活, note, 个人博客, 生活记录" />
+    <meta name="author" content="子涵" />
     <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
     <link rel="stylesheet" href="/static/style.css" />
-    <title>一键部署Halo博客</title>
+    <title>一键部署Halo博客 - 涵有闲</title>
   </head>
   <body id="top">
-    <a href="#top" class="back-to-top" aria-label="返回顶部">↑</a>
-    <header class="site-header">
-      <div class="site-title">
-        <a href="/">涵有闲</a>
-      </div>
-      <nav class="site-nav">
-        <a href="/about#now">现在</a>
-        <a href="/journals">碎语</a>
-        <a href="/about">关于</a>
-      </nav>
-    </header>
-
-    <article>
-      <header class="post-header">
-        <h1>一键部署Halo博客</h1>
-        <div class="post-meta">
-          <span>子涵</span>
-          <span class="separator">·</span>
-          <span>2022-06-29</span>
-        </div>
+    <div class="main-container">
+      <header class="site-header">
+        <a href="/" class="back-link">⟵ 涵有闲的博客</a>
       </header>
-      <div class="post-content"><h2>前言</h2>
+
+      <main>
+        <article>
+          <header class="post-header">
+            <h2 class="post-title">一键部署Halo博客</h2>
+            <div class="post-meta">2022/06/29</div>
+          </header>
+          <div class="post-content"><h2>前言</h2>
 <ul>
 <li>2023.4.11 使用 notion + nobelium + vercel 的形式部署博客</li>
 <li>2022.12.30 halo 博客 2.0 时代了，不大喜欢了，转回 typecho,目前教程仅对 halo1.5 及以下生效。</li>
@@ -133,11 +124,16 @@ curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun
 <h2>结束语</h2>
 <p>大道至简，愿大家不要因为乱七八糟的东西，忘记了本来的目的，就像写作。</p>
 </div>
-    </article>
-    <footer>
-      <span>© 2021-2025 子涵</span>
-      <a href="/feed">订阅</a>
-    </footer>
+        </article>
+      </main>
+
+      <footer class="site-footer">
+        <span>© 2021-2025 子涵</span>
+        <span style="margin: 0 0.5rem">·</span>
+        <a href="/feed">订阅</a>
+      </footer>
+    </div>
+
     
     <!-- 百度统计 -->
     <script>

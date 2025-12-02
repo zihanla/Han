@@ -22,12 +22,15 @@ import { calculateHash, readBuildHash, saveBuildHash } from "./utils/hash.js";
 import { processMarkdownFile, getPostBasicInfo } from "./utils/post.js";
 import { generateFeed } from "./utils/feed.js";
 import { generateIndexHtml } from "./templates/index.js";
+import { generateArchiveHtml } from "./templates/archive.js";
 import { processJournals, generateJournalsHtml } from "./utils/journals.js";
 import { PATHS } from "./config.js";
 import {
   getAllSourceFiles,
   shouldRebuildArticles,
   shouldRebuildJournals,
+  shouldRebuildFeed,
+  shouldRebuildIndex,
 } from "./utils/build-deps.js";
 
 // 清理旧文件
@@ -35,10 +38,20 @@ async function cleanupOldFiles(existingHtmlFiles, outputDir) {
   for (const slug of existingHtmlFiles) {
     try {
       const filePath = path.join(outputDir, `${slug}.html`);
+      // 检查文件是否存在
+      try {
+        await fs.access(filePath);
+      } catch {
+        continue; // 文件不存在，跳过
+      }
+
       await fs.unlink(filePath);
       console.log(`删除文件: post/${slug}.html...`);
     } catch (error) {
-      console.warn(`删除文件失败 ${slug}.html:`, error);
+      // 忽略文件锁定导致的删除失败，不影响构建
+      if (error.code !== "EPERM" && error.code !== "EBUSY") {
+        console.warn(`删除文件失败 ${slug}.html:`, error.message);
+      }
     }
   }
 }
@@ -129,6 +142,8 @@ async function checkSourceChanges(buildHashes = {}) {
     newHashes,
     needRebuildArticles: shouldRebuildArticles(changedFiles),
     needRebuildJournals: shouldRebuildJournals(changedFiles),
+    needRebuildFeed: shouldRebuildFeed(changedFiles),
+    needRebuildIndex: shouldRebuildIndex(changedFiles),
   };
 }
 
@@ -246,10 +261,32 @@ async function handlePosts(buildHashes = {}) {
 // 生成站点文件
 async function generateSiteFiles(posts, hasChanges = false) {
   try {
-    // 总是更新首页
-    await fs.writeFile("./dist/index.html", generateIndexHtml(posts));
+    // 读取所有碎语数据
+    let allJournals = [];
+    try {
+      const journalsContent = await fs.readFile("./journals.json", "utf-8");
+      allJournals = JSON.parse(journalsContent);
+    } catch (error) {
+      console.warn("读取碎语数据失败,首页将不显示碎语");
+    }
 
-    // 只在有文章变化时更新feed
+    // 生成分页首页
+    // 导入新的生成函数（注意：这里需要动态导入或假设已更新导入）
+    const { generateIndexPages } = await import("./templates/index.js");
+    const pages = generateIndexPages(posts, allJournals);
+
+    // 写入所有分页文件
+    for (const page of pages) {
+      const outputPath = `./dist/${page.path}`;
+      const dir = path.dirname(outputPath);
+      await fs.mkdir(dir, { recursive: true });
+      await fs.writeFile(outputPath, page.html);
+    }
+
+    // 生成归档页
+    await fs.writeFile("./dist/archive.html", generateArchiveHtml(posts));
+
+    // 在有文章变化或 feed 依赖变化时更新 RSS
     if (hasChanges) {
       await fs.writeFile("./dist/feed", await generateFeed(posts));
       console.log("\n更新RSS feed");
@@ -419,10 +456,11 @@ export async function buildSite() {
       return new Date(b.date) - new Date(a.date);
     });
 
-    // 9. 生成首页和 RSS（文章变化时更新 RSS）
+    // 9. 生成首页和 RSS（文章变化或 feed 依赖变化时更新 RSS）
     const hasPostChanges =
       Object.keys(postsResult.newHashes).length > 0 || hasDeletedFiles;
-    await generateSiteFiles(sortedPosts, hasPostChanges);
+    const shouldUpdateFeed = hasPostChanges || sourceChanges.needRebuildFeed;
+    await generateSiteFiles(sortedPosts, shouldUpdateFeed);
 
     // 10. 保存新的哈希记录
     await saveBuildHash(newHashes);

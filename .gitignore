@@ -2,3 +2,4 @@
 node_modules/
 .snow/
 *.snow
+ROLE.md

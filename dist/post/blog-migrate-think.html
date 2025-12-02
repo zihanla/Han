@@ -2,36 +2,27 @@
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <meta content="blog, 涵有闲, Han, 碎片生活, note, 个人博客, 生活记录" name="keywords" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="> 迁移博客引发的，对写博客的目的、原则的回溯思考，以及途中做出的一些改变。 服务器过期，没钱没钱没钱，这很现实。 考虑并实践过用静态博客，但基于使用环境、使用过程、主题的选择，等出现问题时的折腾，我戴上痛苦面具，选择花钱消灾。..." />
+    <meta name="keywords" content="blog, 涵有闲, Han, 碎片生活, note, 个人博客, 生活记录" />
+    <meta name="author" content="子涵" />
     
     <link rel="stylesheet" href="/static/style.css" />
-    <title>迁移博客产生的思考</title>
+    <title>迁移博客产生的思考 - 涵有闲</title>
   </head>
   <body id="top">
-    <a href="#top" class="back-to-top" aria-label="返回顶部">↑</a>
-    <header class="site-header">
-      <div class="site-title">
-        <a href="/">涵有闲</a>
-      </div>
-      <nav class="site-nav">
-        <a href="/about#now">现在</a>
-        <a href="/journals">碎语</a>
-        <a href="/about">关于</a>
-      </nav>
-    </header>
-
-    <article>
-      <header class="post-header">
-        <h1>迁移博客产生的思考</h1>
-        <div class="post-meta">
-          <span>子涵</span>
-          <span class="separator">·</span>
-          <span>2022-06-28</span>
-        </div>
+    <div class="main-container">
+      <header class="site-header">
+        <a href="/" class="back-link">⟵ 涵有闲的博客</a>
       </header>
-      <div class="post-content"><blockquote>
+
+      <main>
+        <article>
+          <header class="post-header">
+            <h2 class="post-title">迁移博客产生的思考</h2>
+            <div class="post-meta">2022/06/28</div>
+          </header>
+          <div class="post-content"><blockquote>
 <p>迁移博客引发的，对写博客的目的、原则的回溯思考，以及途中做出的一些改变。</p>
 </blockquote>
 <h2>迁移</h2>
@@ -52,11 +43,16 @@
 <p>2023.04.11 目前已经通过 notion 存放博客，似乎分类和标签都不需要了</p>
 <p>2024.04.02 通过 pandoc 渲染 html，最后通过 vercel 展示</p>
 </div>
-    </article>
-    <footer>
-      <span>© 2021-2025 子涵</span>
-      <a href="/feed">订阅</a>
-    </footer>
+        </article>
+      </main>
+
+      <footer class="site-footer">
+        <span>© 2021-2025 子涵</span>
+        <span style="margin: 0 0.5rem">·</span>
+        <a href="/feed">订阅</a>
+      </footer>
+    </div>
+
     
     <!-- 百度统计 -->
     <script>

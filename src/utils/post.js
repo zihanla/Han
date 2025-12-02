@@ -153,12 +153,8 @@ function processImages(html) {
     // 添加懒加载属性到 img 标签
     const lazyImg = img.replace(/<img/, '<img loading="lazy" decoding="async"');
 
-    return alt?.[1]
-      ? `<figure class="image-container">
-           ${lazyImg}
-           <figcaption>${alt[1]}</figcaption>
-         </figure>`
-      : `<figure class="image-container">
+    // 统一返回不带标题的图片容器
+    return `<figure class="image-container">
            ${lazyImg}
          </figure>`;
   });
