@@ -22,74 +22,63 @@
 
     <main class="timeline-container">
       
-    <article class="timeline-card" onclick="location.href='/post/git-common-commands'">
-      <div class="card-content">
-        <h2 class="timeline-title">我常用的git命令</h2>
+    <article class="timeline-card is-post" onclick="location.href='/post/git-common-commands'">
+      
+      <div class="card-body">
+        <span class="timeline-title">我常用的git命令</span>
+        <span class="timeline-content">> 以前没提交代码到仓库的觉悟，现在尝试把 git 和 github 加入到我的日常，一下是我常用的 git 命令。  IDE 提供了很好的 git 图形化操作，基本不用写命令，就记录几个用的多的。    IDE 还没玩儿明白，大概之后这些命令也不用记了。(emmm 刚刚安装了中文插件，发现了新大陆 IDE 太强大了)  > 2023.5.28 更新  本地仓库想要跟远程仓库关联，首先创建远程仓库，然后再 IDE 点击推送，输入远程仓库地址就可以自动关联了  > 2023.8.1 更新  本地仓库直接提交，通过 ide 可以自动在远程仓库进行创建，不用先去远程创建，再关联</span>
       </div>
-      <div class="card-meta">
-        <span class="time-tag">2022/10/06</span>
-      </div>
+    
+      <span class="time-tag">2022/10/06</span>
     </article>
   
-    <article class="timeline-card" onclick="location.href='/journals#j-1664939340000'">
-      <div class="card-content">
-        <div class="timeline-content">一个人得照顾好自己，晚上得盖好被子，这不又中招了，慢慢调整吧</div>
-      </div>
-      <div class="card-meta">
-        <span class="time-tag">2022/10/05</span>
-      </div>
+    <article class="timeline-card is-journal" onclick="location.href='/journals#j-1664939340000'">
+      <span class="timeline-content">一个人得照顾好自己，晚上得盖好被子，这不又中招了，慢慢调整吧</span>
+      <span class="time-tag">2022/10/05</span>
     </article>
   
-    <article class="timeline-card" onclick="location.href='/post/bee-debug'">
-      <div class="card-content">
-        <h2 class="timeline-title">bee工具踩坑</h2>
+    <article class="timeline-card is-post" onclick="location.href='/post/bee-debug'">
+      
+      <div class="card-body">
+        <span class="timeline-title">bee工具踩坑</span>
+        <span class="timeline-content">> 借助 bee 命令行工具的热编译功能，结果无法找到命令 bee 命令，还好我面向搜索引擎...  bee 是用来进行 beego 项目(普通项目也可以使用)的创建、热编译、开发、测试、和部署的工具。  我是按照 bee 官方文档进行部署的，pkg 中有 beego 包的，结果输入 bee 无法找到命令，索性搜索引擎提供了解决方案。    编译后只要配置过 gopath ，就可以在任意位置使用 bee 工具了。</span>
       </div>
-      <div class="card-meta">
-        <span class="time-tag">2022/10/01</span>
-      </div>
+    
+      <span class="time-tag">2022/10/01</span>
     </article>
   
-    <article class="timeline-card" onclick="location.href='/journals#j-1664420040000'">
-      <div class="card-content">
-        <div class="timeline-content">写功能前一定要先跑通逻辑，再去写功能</div>
-      </div>
-      <div class="card-meta">
-        <span class="time-tag">2022/09/29</span>
-      </div>
+    <article class="timeline-card is-journal" onclick="location.href='/journals#j-1664420040000'">
+      <span class="timeline-content">写功能前一定要先跑通逻辑，再去写功能</span>
+      <span class="time-tag">2022/09/29</span>
     </article>
   
-    <article class="timeline-card" onclick="location.href='/journals#j-1664277240000'">
-      <div class="card-content">
-        <div class="timeline-content">在win终端，输入tree，可以查看当前目录结构树</div>
-      </div>
-      <div class="card-meta">
-        <span class="time-tag">2022/09/27</span>
-      </div>
+    <article class="timeline-card is-journal" onclick="location.href='/journals#j-1664277240000'">
+      <span class="timeline-content">在win终端，输入tree，可以查看当前目录结构树</span>
+      <span class="time-tag">2022/09/27</span>
     </article>
   
-    <article class="timeline-card" onclick="location.href='/post/go-concurrency'">
-      <div class="card-content">
-        <h2 class="timeline-title">来自go并发的魅力</h2>
+    <article class="timeline-card is-post" onclick="location.href='/post/go-concurrency'">
+      
+      <div class="card-body">
+        <span class="timeline-title">来自go并发的魅力</span>
+        <span class="timeline-content">> 学 C、Java 时都没有能力了解线程相关的东西(我是菜鸡)，玩 go 时终于可以体验以下了(实现简单)。    > 假设你要做两件事：洗衣服、做饭，下面是三种方案  - 串行：先洗完衣服再做饭，或者先做饭再洗衣服 - 并发：洗会儿衣服，做会儿饭，直到都搞完(先后顺序不定，两边跑，想到啥搞啥，情景自己脑补) - 并行：在厨房洗衣服，一只手做饭，一只手洗衣服          > 原作者 zxysilent ，很形象所以拿过来，方便理解  - 来源</span>
       </div>
-      <div class="card-meta">
-        <span class="time-tag">2022/09/27</span>
-      </div>
+    
+      <span class="time-tag">2022/09/27</span>
     </article>
   
     </main>
     
     
     <nav class="pagination">
-      <a href="/page/12/" class="page-nav prev">上一页</a>
+      <a href="/page/12/" class="page-nav">上一页</a>
       <span class="page-number">13 / 17</span>
-      <a href="/page/14/" class="page-nav next">下一页</a>
+      <a href="/page/14/" class="page-nav">下一页</a>
     </nav>
   
 
-    <footer class="site-footer">
-      <span>© 2021-2025 子涵</span>
-      <span style="margin: 0 0.5rem">·</span>
-      <a href="/feed">订阅</a>
+    <footer class="site-footer site-footer-center">
+      <span>© 2021-2025 子涵 · <a href="/feed">订阅</a></span>
     </footer>
   </div>
   

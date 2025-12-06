@@ -21,7 +21,8 @@ import { minify } from "terser";
 import { calculateHash, readBuildHash, saveBuildHash } from "./utils/hash.js";
 import { processMarkdownFile, getPostBasicInfo } from "./utils/post.js";
 import { generateFeed } from "./utils/feed.js";
-import { generateIndexHtml } from "./templates/index.js";
+
+import { generateIndexPages } from "./templates/index.js";
 import { generateArchiveHtml } from "./templates/archive.js";
 import { processJournals, generateJournalsHtml } from "./utils/journals.js";
 import { PATHS } from "./config.js";
@@ -271,8 +272,6 @@ async function generateSiteFiles(posts, hasChanges = false) {
     }
 
     // 生成分页首页
-    // 导入新的生成函数（注意：这里需要动态导入或假设已更新导入）
-    const { generateIndexPages } = await import("./templates/index.js");
     const pages = generateIndexPages(posts, allJournals);
 
     // 写入所有分页文件

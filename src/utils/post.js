@@ -6,11 +6,10 @@ import { BLOG_CONFIG } from "../config.js";
 import { generateSlug } from "./slug.js";
 import { formatDate } from "./date.js";
 
-// 1. 添加结果缓存
-const postCache = new Map();
+// 渲染器缓存（同一构建进程内复用）
 const rendererCache = new Map();
 
-// 2. 优化代码高亮初始化
+// 代码高亮延迟加载
 let hljs = null;
 let highlightInitPromise = null;
 
@@ -30,7 +29,7 @@ async function initializeHighlight() {
   return highlightInitPromise;
 }
 
-// 3. 优化渲染器创建
+// 创建 Markdown 渲染器
 function createRenderer(hasCodeBlock = false) {
   const cacheKey = `renderer_${hasCodeBlock}`;
   if (rendererCache.has(cacheKey)) {
@@ -94,7 +93,7 @@ function createRenderer(hasCodeBlock = false) {
   return renderer;
 }
 
-// 4. 优化元数据处理
+// 确保文章有完整的 frontmatter 元数据
 async function ensureFileMeta(filePath, content) {
   const { data = {}, content: markdown } = matter(content);
   const updates = {};
@@ -135,7 +134,7 @@ async function ensureFileMeta(filePath, content) {
       author: finalData.author,
       slug: finalData.slug,
       date: dateStr,
-      displayDate: formatDate(dateStr, "display"),
+      displayDate: formatDate(dateStr, "short"),
       detailDate: formatDate(dateStr, "detail"),
       // 如果是about.md，则使用根路径URL
       url: fileName === "about.md" ? "/about" : `/post/${finalData.slug}`,
@@ -145,7 +144,7 @@ async function ensureFileMeta(filePath, content) {
   };
 }
 
-// 5. 优化图片处理
+// 处理图片：添加懒加载和容器
 function processImages(html) {
   return html.replace(/<p>(<img[^>]+>)<\/p>/g, (match, img) => {
     const alt = img.match(/alt="([^"]*)"/);
@@ -160,22 +159,17 @@ function processImages(html) {
   });
 }
 
-// 6. 优化基本信息获取
+// 获取文章基本信息（用于未变化的文章）
 export async function getPostBasicInfo(filePath) {
-  // 检查缓存
-  if (postCache.has(filePath)) {
-    return postCache.get(filePath);
-  }
-
   const content = await fs.readFile(filePath, "utf-8");
-  const { meta } = await ensureFileMeta(filePath, content);
-
-  // 缓存结果
-  postCache.set(filePath, meta);
-  return meta;
+  const { meta, content: markdown } = await ensureFileMeta(filePath, content);
+  return {
+    ...meta,
+    content: markdown, // 包含原始 markdown 内容用于生成摘要
+  };
 }
 
-// 7. 优化主处理函数
+// 处理 Markdown 文件，生成 HTML
 export async function processMarkdownFile(filePath, template) {
   try {
     const content = await fs.readFile(filePath, "utf-8");

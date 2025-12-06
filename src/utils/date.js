@@ -1,59 +1,41 @@
 /**
  * 格式化日期
- * @param {Date|string} date - 要格式化的日期
- * @param {string} format - 输出格式 ('iso' | 'rss' | 'full' | 'display' | 'detail')
+ * @param {string} dateString - 日期字符串
+ * @param {string} format - 输出格式 ('short' | 'detail' | 'full')
+ *   - short: 2024/10/09 (首页/归档用)
+ *   - detail: 2024年10月09日 22:34 (文章详情页用)
+ *   - full: 有时分显示时分，没有只显示日期 (碎语用)
  * @returns {string} 格式化后的日期字符串
  */
-export function formatDate(dateString) {
-  const date = new Date(dateString);
+export function formatDate(dateString, format = "short") {
+  // 统一处理日期字符串，支持 "2024-10-09 22:34" 和 "2024/10/09 22:34" 格式
+  const normalized = String(dateString).replace(/-/g, "/");
+  const hasTime = /\d{2}:\d{2}/.test(normalized);
+
+  const date = new Date(normalized);
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
 
-  return `${year}/${month}/${day}`;
-}
-export function getTimestamp(date) {
-  const d = new Date(date);
-  return isNaN(d.getTime()) ? new Date().getTime() : d.getTime();
-}
+  switch (format) {
+    case "detail":
+      // 文章详情页：2024年10月09日 22:34
+      return hasTime
+        ? `${year}年${month}月${day}日 ${hours}:${minutes}`
+        : `${year}年${month}月${day}日`;
 
-/**
- * 获取相对时间
- * @param {string|Date} dateStr
- * @returns {string}
- */
-export function getRelativeTime(dateStr) {
-  const date = new Date(dateStr);
-  const now = new Date();
-  const diff = now - date;
+    case "full":
+      // 碎语页：返回对象，日期和时间分开
+      return {
+        date: `${year}/${month}/${day}`,
+        time: hasTime ? `${hours}:${minutes}` : null,
+      };
 
-  // 转换为秒
-  const seconds = Math.floor(diff / 1000);
-
-  if (seconds < 60) {
-    return "刚刚";
+    case "short":
+    default:
+      // 首页/归档：只显示日期
+      return `${year}/${month}/${day}`;
   }
-
-  const minutes = Math.floor(seconds / 60);
-  if (minutes < 60) {
-    return `${minutes}分钟前`;
-  }
-
-  const hours = Math.floor(minutes / 60);
-  if (hours < 24) {
-    return `${hours}小时前`;
-  }
-
-  const days = Math.floor(hours / 24);
-  if (days < 30) {
-    return `${days}天前`;
-  }
-
-  const months = Math.floor(days / 30);
-  if (months < 12) {
-    return `${months}个月前`;
-  }
-
-  const years = Math.floor(months / 12);
-  return `${years}年前`;
 }

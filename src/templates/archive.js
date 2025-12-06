@@ -3,28 +3,6 @@
  */
 import { BLOG_CONFIG } from "../config.js";
 
-/**
- * 生成归档列表 HTML
- * @param {Array} posts - 所有文章列表数据
- * @returns {string} 归档列表 HTML
- */
-function generateArchiveList(posts) {
-  return posts
-    .map(
-      (post) => `
-    <article class="timeline-card" onclick="location.href='${post.url}'">
-      <div class="card-content">
-        <h2 class="timeline-title">${post.title}</h2>
-      </div>
-      <div class="card-meta">
-        <span class="time-tag">${post.displayDate}</span>
-      </div>
-    </article>
-  `
-    )
-    .join("");
-}
-
 export function generateArchiveHtml(posts) {
   // 生成文章列表（简单列表形式，放在一个卡片内）
   const archiveList = posts
@@ -67,9 +45,8 @@ export function generateArchiveHtml(posts) {
     </main>
 
     <footer class="site-footer">
-      <span>© ${BLOG_CONFIG.yearRange} ${BLOG_CONFIG.author}</span>
-      <span style="margin: 0 0.5rem">·</span>
-      <a href="/feed">订阅</a>
+      <a href="#top" class="back-to-top">返回顶部 ↑</a>
+      <span>© ${BLOG_CONFIG.yearRange} ${BLOG_CONFIG.author} · <a href="/feed">订阅</a></span>
     </footer>
   </div>
 

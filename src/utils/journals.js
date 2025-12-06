@@ -87,18 +87,21 @@ export async function generateJournalsHtml(journalsData) {
 
   // 生成HTML，在这里渲染 Markdown - 使用简洁风格
   const journalsHtml = journals
-    .map(
-      (journal) => `
+    .map((journal) => {
+      const { date, time } = formatDate(journal.date, "full");
+      const timeHtml = time ? `<span class="journal-time">${time}</span>` : "";
+      return `
     <article id="j-${new Date(journal.date).getTime()}" class="journal-item">
       <div class="journal-content">
         ${marked(journal.content)}
       </div>
       <div class="journal-meta">
-        <span class="journal-date">${formatDate(journal.date)}</span>
+        <span class="journal-date">${date}</span>
+        ${timeHtml}
       </div>
     </article>
-  `
-    )
+  `;
+    })
     .join("");
 
   // 读取并填充模板

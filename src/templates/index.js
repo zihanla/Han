@@ -31,28 +31,33 @@ function generateTimelineItem(item) {
 
   let contentHtml = "";
   let linkUrl = "";
+  let cardClass = "timeline-card";
 
   if (isPost) {
-    // 文章：只显示标题
-    contentHtml = `<h2 class="timeline-title">${item.title}</h2>`;
+    // 文章：标题 + 内容预览
+    const plainContent = generatePreview(item.content);
+    contentHtml = `
+      <div class="card-body">
+        <span class="timeline-title">${item.title}</span>
+        <span class="timeline-content">${plainContent}</span>
+      </div>
+    `;
     linkUrl = item.url;
+    cardClass += " is-post";
   } else {
     // 碎语：纯内容预览
     const plainContent = generatePreview(item.content);
-    contentHtml = `<div class="timeline-content">${plainContent}</div>`;
+    contentHtml = `<span class="timeline-content">${plainContent}</span>`;
     // 链接到碎语页的具体锚点 (使用时间戳)
     const journalId = `j-${new Date(item.date).getTime()}`;
     linkUrl = `/journals#${journalId}`;
+    cardClass += " is-journal";
   }
 
   return `
-    <article class="timeline-card" onclick="location.href='${linkUrl}'">
-      <div class="card-content">
-        ${contentHtml}
-      </div>
-      <div class="card-meta">
-        <span class="time-tag">${displayTime}</span>
-      </div>
+    <article class="${cardClass}" onclick="location.href='${linkUrl}'">
+      ${contentHtml}
+      <span class="time-tag">${displayTime}</span>
     </article>
   `;
 }
@@ -67,12 +72,12 @@ function generatePagination(currentPage, totalPages) {
     currentPage > 1
       ? `<a href="${
           currentPage === 2 ? "/" : `/page/${currentPage - 1}/`
-        }" class="page-nav prev">上一页</a>`
+        }" class="page-nav">上一页</a>`
       : '<span class="page-nav disabled">上一页</span>';
 
   const nextLink =
     currentPage < totalPages
-      ? `<a href="/page/${currentPage + 1}/" class="page-nav next">下一页</a>`
+      ? `<a href="/page/${currentPage + 1}/" class="page-nav">下一页</a>`
       : '<span class="page-nav disabled">下一页</span>';
 
   return `
@@ -126,10 +131,10 @@ function generatePageHtml(items, currentPage, totalPages) {
     
     ${paginationHtml}
 
-    <footer class="site-footer">
-      <span>© ${BLOG_CONFIG.yearRange} ${BLOG_CONFIG.author}</span>
-      <span style="margin: 0 0.5rem">·</span>
-      <a href="/feed">订阅</a>
+    <footer class="site-footer site-footer-center">
+      <span>© ${BLOG_CONFIG.yearRange} ${
+    BLOG_CONFIG.author
+  } · <a href="/feed">订阅</a></span>
     </footer>
   </div>
   
@@ -182,10 +187,4 @@ export function generateIndexPages(posts, journals = []) {
   }
 
   return pages;
-}
-
-// 保持旧接口兼容（虽然不再直接使用）
-export function generateIndexHtml(posts, journals = []) {
-  const pages = generateIndexPages(posts, journals);
-  return pages[0].html;
 }
