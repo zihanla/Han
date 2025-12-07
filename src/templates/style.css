@@ -510,6 +510,118 @@ table {
   margin-bottom: 0;
 }
 
+/* 碎语图片网格布局 */
+.journal-images {
+  display: grid;
+  gap: 6px;
+  margin: 12px 0;
+  max-width: 100%;
+}
+
+/* 单张图片 - 较大展示 */
+.journal-images[data-count="1"] {
+  grid-template-columns: 1fr;
+  max-width: 70%;
+}
+
+/* 2张图片 - 并排 */
+.journal-images[data-count="2"] {
+  grid-template-columns: repeat(2, 1fr);
+  max-width: 85%;
+}
+
+/* 3张图片 - 三列 */
+.journal-images[data-count="3"] {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* 4张及以上 - 3列网格 */
+.journal-images[data-count="4"],
+.journal-images[data-count="5"],
+.journal-images[data-count="6"],
+.journal-images[data-count="7"],
+.journal-images[data-count="8"],
+.journal-images[data-count="9"] {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* 4张特殊处理 - 2x2 */
+.journal-images[data-count="4"] {
+  grid-template-columns: repeat(2, 1fr);
+  max-width: 70%;
+}
+
+/* 图片包装器 */
+.journal-img-wrapper {
+  position: relative;
+  display: block;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 6px;
+  cursor: zoom-in;
+}
+
+.journal-img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  margin: 0;
+  border-radius: 0;
+  transition: transform 0.2s ease;
+}
+
+.journal-img-wrapper:hover img {
+  transform: scale(1.03);
+}
+
+/* 单张图片不裁切，保持原比例 */
+.journal-images[data-count="1"] .journal-img-wrapper {
+  aspect-ratio: auto;
+}
+
+.journal-images[data-count="1"] .journal-img-wrapper img {
+  height: auto;
+  object-fit: contain;
+}
+
+/* Lightbox - 纯 CSS 实现 */
+.lightbox-toggle {
+  display: none;
+}
+
+.lightbox-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+  z-index: 1000;
+  cursor: zoom-out;
+}
+
+.lightbox-overlay img {
+  max-width: 90vw;
+  max-height: 90vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 4px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* 点击展开 */
+.lightbox-toggle:checked + .journal-img-wrapper .lightbox-overlay {
+  opacity: 1;
+  visibility: visible;
+}
+
 /* ================================
  * 分页 & Footer
  * ================================ */
