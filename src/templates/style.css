@@ -149,13 +149,13 @@ code {
   font-family: var(--font-mono);
   font-size: 0.9em;
   padding: 2px 5px;
-  background-color: #fff;
-  color: #5a4a3a;
+  background-color: var(--bg-paper);
+  color: var(--color-code);
   border-radius: 3px;
 }
 
 pre {
-  background-color: #fff;
+  background-color: var(--bg-paper);
   padding: 16px 20px;
   border-radius: 4px;
   overflow-x: auto;
@@ -167,7 +167,7 @@ pre code {
   background: none;
   padding: 0;
   font-size: 0.88em;
-  color: #3d3428;
+  color: var(--color-code);
 }
 /* 引用 */
 blockquote {
@@ -510,48 +510,17 @@ table {
   margin-bottom: 0;
 }
 
-/* 碎语图片网格布局 */
+/* 碎语图片布局 - 仿 QQ 空间风格 */
 .journal-images {
   display: grid;
-  gap: 6px;
+  gap: 4px;
   margin: 12px 0;
-  max-width: 100%;
-}
-
-/* 单张图片 - 较大展示 */
-.journal-images[data-count="1"] {
-  grid-template-columns: 1fr;
-  max-width: 70%;
-}
-
-/* 2张图片 - 并排 */
-.journal-images[data-count="2"] {
-  grid-template-columns: repeat(2, 1fr);
-  max-width: 85%;
-}
-
-/* 3张图片 - 三列 */
-.journal-images[data-count="3"] {
+  /* 默认3列 */
   grid-template-columns: repeat(3, 1fr);
+  max-width: 420px;
 }
 
-/* 4张及以上 - 3列网格 */
-.journal-images[data-count="4"],
-.journal-images[data-count="5"],
-.journal-images[data-count="6"],
-.journal-images[data-count="7"],
-.journal-images[data-count="8"],
-.journal-images[data-count="9"] {
-  grid-template-columns: repeat(3, 1fr);
-}
-
-/* 4张特殊处理 - 2x2 */
-.journal-images[data-count="4"] {
-  grid-template-columns: repeat(2, 1fr);
-  max-width: 70%;
-}
-
-/* 图片包装器 */
+/* 图片容器 - 通用（必须在特殊规则之前） */
 .journal-img-wrapper {
   position: relative;
   display: block;
@@ -574,14 +543,52 @@ table {
   transform: scale(1.03);
 }
 
-/* 单张图片不裁切，保持原比例 */
+/* 单图：保持原比例，限制尺寸 */
+.journal-images[data-count="1"] {
+  display: block;
+  max-width: 60%;
+}
+
 .journal-images[data-count="1"] .journal-img-wrapper {
   aspect-ratio: auto;
+  max-height: 320px;
+  width: fit-content;
 }
 
 .journal-images[data-count="1"] .journal-img-wrapper img {
+  width: auto;
+  max-width: 100%;
   height: auto;
+  max-height: 320px;
   object-fit: contain;
+}
+
+/* 2张图片：两列 */
+.journal-images[data-count="2"] {
+  grid-template-columns: 1fr 1fr;
+  max-width: 280px;
+}
+
+/* 3张图片：三列并排 */
+.journal-images[data-count="3"] {
+  grid-template-columns: repeat(3, 1fr);
+  max-width: 420px;
+}
+
+/* 4张图片：2×2 */
+.journal-images[data-count="4"] {
+  grid-template-columns: repeat(2, 1fr);
+  max-width: 280px;
+}
+
+/* 5张及以上：统一3列 */
+.journal-images[data-count="5"],
+.journal-images[data-count="6"],
+.journal-images[data-count="7"],
+.journal-images[data-count="8"],
+.journal-images[data-count="9"] {
+  grid-template-columns: repeat(3, 1fr);
+  max-width: 420px;
 }
 
 /* Lightbox - 纯 CSS 实现 */
@@ -789,5 +796,19 @@ table {
 
   .journal-meta .journal-time::before {
     content: " ";
+  }
+
+  /* 移动端碎语图片适配 */
+  .journal-images {
+    max-width: 100%;
+  }
+
+  .journal-images[data-count="1"] {
+    max-width: 80%;
+  }
+
+  .journal-images[data-count="2"],
+  .journal-images[data-count="4"] {
+    max-width: 70%;
   }
 }

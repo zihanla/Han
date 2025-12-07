@@ -78,10 +78,10 @@ export async function processJournals() {
 }
 
 /**
- * 处理图片：将连续的 img 标签包装到网格容器中
+ * 处理图片：将 img 标签包装到网格容器中
+ * 简化版：统一处理，无需二次遍历
  */
 function wrapImages(html) {
-  // 生成唯一 ID
   let imgIndex = 0;
   const uniqueId = () => `img-${Date.now()}-${imgIndex++}`;
 
@@ -91,24 +91,20 @@ function wrapImages(html) {
     return `<input type="checkbox" id="${id}" class="lightbox-toggle"><label for="${id}" class="journal-img-wrapper">${imgTag}<div class="lightbox-overlay">${imgTag}</div></label>`;
   };
 
-  // 匹配连续的多个 img 标签（2个及以上）
-  const multiImgPattern = /(<img[^>]*>)(\s*<img[^>]*>)+/g;
+  // 匹配段落中的图片组（marked 会把图片包在 <p> 中）
+  // 同时匹配连续的 img 标签
+  return html.replace(
+    /<p>\s*((<img[^>]*>\s*)+)<\/p>|(<img[^>]*>)(\s*<img[^>]*>)*/g,
+    (match) => {
+      // 提取所有 img 标签
+      const imgs = match.match(/<img[^>]*>/g) || [];
+      if (imgs.length === 0) return match;
 
-  let processed = html.replace(multiImgPattern, (match) => {
-    const imgs = match.match(/<img[^>]*>/g) || [];
-    const count = imgs.length;
-    const wrappedImgs = imgs.map(wrapSingleImg).join("");
-    return `<div class="journal-images" data-count="${count}">${wrappedImgs}</div>`;
-  });
-
-  // 处理单独的图片（不在网格中的）
-  // 匹配 <p> 中只有单个 img 的情况
-  processed = processed.replace(
-    /<p>(<img[^>]*>)<\/p>/g,
-    (match, imgTag) => `<div class="journal-images" data-count="1">${wrapSingleImg(imgTag)}</div>`
+      const count = imgs.length;
+      const wrappedImgs = imgs.map(wrapSingleImg).join("");
+      return `<div class="journal-images" data-count="${count}">${wrappedImgs}</div>`;
+    }
   );
-
-  return processed;
 }
 
 /**
