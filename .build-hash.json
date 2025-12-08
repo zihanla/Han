@@ -9,7 +9,7 @@
   "./src/templates/journals.html": "3b97ded9db4a2ab58ab0e46dca7e3abe",
   "./src/utils/journals.js": "fa352da8302025ac1d2e55bdfe4982dd",
   "./src/utils/feed.js": "b769e59d51ee895186d4edfb11cf4ca2",
-  "./journals.json": "18895f81e3fc1392c3d4c06c5bb21ad0",
+  "./journals.json": "f9cddd5ead977eba3b0c6f9829fb815a",
   "./content/10月6随笔.md": "446b7804ab9947176150e5f30a8d0ad9",
   "./content/2022年度总结.md": "eeff706b00142f6fdc2987faa2cb31e8",
   "./content/2月16随笔.md": "a70ffb6b30fbb60c11d62d5d7f96936c",
@@ -63,5 +63,6 @@
   "./content/随笔-1月27.md": "fd79ab7f23a444979494fb77df9be4eb",
   "./content/骑行的收获.md": "ad43a697b3d6fdb65df45691496dcf77",
   "./content/黎明前的潜伏.md": "fa164ef66111b6d6d88e89573deeea2b",
-  "./about.md": "41c694bbbc68ae584bf437ba6d0f85a1"
+  "./about.md": "41c694bbbc68ae584bf437ba6d0f85a1",
+  "./content/记录我在淮南的日子.md": "a51b662e50f645d092a06137ab7fc2a2"
 }
