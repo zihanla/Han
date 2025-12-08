@@ -134,7 +134,7 @@ img {
   height: auto;
   display: block;
   margin: 2em auto;
-  border-radius: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 /* 时间/辅助文字 */
@@ -430,7 +430,7 @@ table {
   height: auto;
   display: block;
   margin: 2em auto;
-  border-radius: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .post-content figure {
@@ -526,7 +526,6 @@ table {
   display: block;
   aspect-ratio: 1;
   overflow: hidden;
-  border-radius: 6px;
   cursor: zoom-in;
 }
 
@@ -619,7 +618,6 @@ table {
   width: auto;
   height: auto;
   object-fit: contain;
-  border-radius: 4px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
 }
 
