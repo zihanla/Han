@@ -4,27 +4,11 @@
         <title>涵有闲</title>
         <link>https://hyx.ink</link>
         <description>动起来就好，想做就去做吧。涵有闲博客，记录生活点滴，分享生活感悟。</description>
-        <lastBuildDate>Tue, 09 Dec 2025 22:30:50 +0800</lastBuildDate>
+        <lastBuildDate>Tue, 09 Dec 2025 22:31:57 +0800</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>Han Static Blog Generator</generator>
         <language>zh-CN</language>
         <atom:link href="https://hyx.ink/feed" rel="self" type="application/rss+xml"/>
-        <item>
-            <title><![CDATA[标题 这次测试 标题和内容是不是都能删]]></title>
-            <link>https://hyx.ink/post/biao-ti-zhe-ci-ce-shi-biao-ti-he-nei-rong-shi-bu-shi-du-neng-shan</link>
-            <guid>https://hyx.ink/post/biao-ti-zhe-ci-ce-shi-biao-ti-he-nei-rong-shi-bu-shi-du-neng-shan</guid>
-            <pubDate>Tue, 09 Dec 2025 22:30:00 +0800</pubDate>
-            <dc:creator>子涵</dc:creator>
-            <description><![CDATA[啊啊啊啊啊啊啊啊 啦啦啦啦 啦啦啦啦啦啦]]></description>
-        </item>
-        <item>
-            <title><![CDATA[我是新标题]]></title>
-            <link>https://hyx.ink/post/wo-shi-xin-biao-ti</link>
-            <guid>https://hyx.ink/post/wo-shi-xin-biao-ti</guid>
-            <pubDate>Tue, 09 Dec 2025 22:28:00 +0800</pubDate>
-            <dc:creator>子涵</dc:creator>
-            <description><![CDATA[如果内容是新标题 则是成功]]></description>
-        </item>
         <item>
             <title><![CDATA[记我这波折的半年]]></title>
             <link>https://hyx.ink/post/ji-wo-zhe-bo-zhe-de-ban-nian</link>
