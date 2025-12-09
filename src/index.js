@@ -357,9 +357,9 @@ async function handleJournals(
       const html = await generateJournalsHtml(journalsData);
       await fs.writeFile(outputPath, html);
 
-      // 返回新的哈希值
+      // 返回新的哈希值（processJournals 可能修改了 journals.json，需要重新计算）
       return {
-        hash: currentHash || (await calculateHash(journalsPath)),
+        hash: await calculateHash(journalsPath),
       };
     }
 
