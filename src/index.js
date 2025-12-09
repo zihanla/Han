@@ -472,6 +472,8 @@ export async function buildSite() {
 }
 
 // 只在直接运行时执行构建
-if (import.meta.url === `file://${process.argv[1].replace(/\\/g, "/")}`) {
+import { pathToFileURL } from "url";
+const scriptUrl = pathToFileURL(process.argv[1]).href;
+if (import.meta.url === scriptUrl) {
   buildSite();
 }
