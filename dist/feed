@@ -4,11 +4,19 @@
         <title>涵有闲</title>
         <link>https://hyx.ink</link>
         <description>动起来就好，想做就去做吧。涵有闲博客，记录生活点滴，分享生活感悟。</description>
-        <lastBuildDate>Tue, 09 Dec 2025 22:31:57 +0800</lastBuildDate>
+        <lastBuildDate>Wed, 10 Dec 2025 04:26:51 +0800</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>Han Static Blog Generator</generator>
         <language>zh-CN</language>
         <atom:link href="https://hyx.ink/feed" rel="self" type="application/rss+xml"/>
+        <item>
+            <title><![CDATA[tg机器人真方便]]></title>
+            <link>https://hyx.ink/post/tg-ji-qi-ren-zhen-fang-bian</link>
+            <guid>https://hyx.ink/post/tg-ji-qi-ren-zhen-fang-bian</guid>
+            <pubDate>Wed, 10 Dec 2025 04:26:00 +0800</pubDate>
+            <dc:creator>子涵</dc:creator>
+            <description><![CDATA[奇迹机器人是真的蛮方便的，我现在就是说直接用它就真的非常非常的方便，怎么说呢，比如说我不要干了，然后我直接说就 他实现的特别快，接收的也特别快，就是说我能实实地给我一个正反馈 他的反馈系统做得特别好，真的很好]]></description>
+        </item>
         <item>
             <title><![CDATA[记我这波折的半年]]></title>
             <link>https://hyx.ink/post/ji-wo-zhe-bo-zhe-de-ban-nian</link>
