@@ -30,10 +30,35 @@ function formatStepsAsWan(steps) {
 }
 
 /**
- * 计算统计数据
+ * 从日期字符串提取月日用于显示（如 "2025.07.25" -> "07.25"）
+ */
+function extractMonthDay(dateStr) {
+  if (!dateStr) return "";
+  const parts = dateStr.split(".");
+  // 支持 "2025.07.25" 或 "07.25" 格式
+  if (parts.length === 3) {
+    return `${parts[1]}.${parts[2]}`;
+  }
+  return dateStr;
+}
+
+/**
+ * 从日期字符串提取年份（如 "2025.07.25" -> "2025"）
+ */
+function extractYear(dateStr) {
+  if (!dateStr) return null;
+  const parts = dateStr.split(".");
+  if (parts.length === 3) {
+    return parts[0];
+  }
+  return null;
+}
+
+/**
+ * 计算统计数据（扁平化结构：record.gongtougong）
  */
 function calculateSummary(records) {
-  let earlyWakeCount = 0; // 早起次数（早于8点）
+  let earlyWakeCount = 0;
   let totalSteps = 0;
   let totalGongtougong = 0;
 
@@ -49,9 +74,9 @@ function calculateSummary(records) {
       totalSteps += record.steps;
     }
 
-    // 拱头功统计
-    if (record.exercise?.gongtougong) {
-      totalGongtougong += record.exercise.gongtougong;
+    // 拱头功统计（扁平化：直接访问 record.gongtougong）
+    if (record.gongtougong) {
+      totalGongtougong += record.gongtougong;
     }
   }
 
@@ -64,13 +89,14 @@ function calculateSummary(records) {
 }
 
 /**
- * 生成单条记录 HTML
+ * 生成单条记录 HTML（扁平化结构）
  */
 function generateRecordHtml(record) {
   const parts = [];
 
-  // 日期
-  parts.push(`<span class="doit-date">${record.date}</span>`);
+  // 日期（只显示月.日）
+  const displayDate = extractMonthDay(record.date);
+  parts.push(`<span class="doit-date">${displayDate}</span>`);
 
   // 睡眠时间
   if (record.sleep) {
@@ -91,10 +117,10 @@ function generateRecordHtml(record) {
     );
   }
 
-  // 拱头功
-  if (record.exercise?.gongtougong) {
+  // 拱头功（扁平化：直接访问 record.gongtougong）
+  if (record.gongtougong) {
     parts.push(
-      `<span class="doit-exercise">拱头功 ${record.exercise.gongtougong} 个</span>`
+      `<span class="doit-exercise">拱头功 ${record.gongtougong} 个</span>`
     );
   }
 
@@ -102,9 +128,9 @@ function generateRecordHtml(record) {
 }
 
 /**
- * 生成总览 HTML（左对齐，总步数显示万步）
+ * 生成总览 HTML
  */
-function generateSummaryHtml(summary, year) {
+function generateSummaryHtml(summary) {
   return `
     <div class="doit-summary-item">
       <span class="summary-label">早起（<8点）</span>
@@ -125,28 +151,39 @@ function generateSummaryHtml(summary, year) {
 
 /**
  * 处理行动数据
- * 返回当前年份的数据和年份信息
+ * 支持扁平数组格式：[{ "date": "2025.07.25", ... }]
  */
 export async function processDoitData() {
   try {
     const content = await fs.readFile(PATHS.doit, "utf-8");
     const data = JSON.parse(content);
 
-    // 获取当前年份
-    const currentYear = new Date().getFullYear().toString();
+    // 扁平数组格式
+    if (Array.isArray(data)) {
+      // 按日期降序排序
+      const records = data.sort((a, b) => {
+        // "2025.07.25" 格式可直接字符串比较
+        return (b.date || "").localeCompare(a.date || "");
+      });
 
-    // 优先返回当前年份数据，否则返回最新年份
+      // 提取年份（从第一条记录）
+      const year = records.length > 0 ? extractYear(records[0].date) : null;
+
+      return { year, records };
+    }
+
+    // 兼容旧的按年份分组格式
+    const currentYear = new Date().getFullYear().toString();
     const years = Object.keys(data).sort((a, b) => b - a);
     const targetYear = years.includes(currentYear) ? currentYear : years[0];
 
     return {
       year: targetYear,
       records: data[targetYear] || [],
-      allYears: years,
     };
   } catch (error) {
     console.warn("读取行动数据失败:", error.message);
-    return { year: null, records: [], allYears: [] };
+    return { year: null, records: [] };
   }
 }
 
@@ -154,7 +191,7 @@ export async function processDoitData() {
  * 生成行动页面 HTML
  */
 export async function generateDoitHtml(doitData) {
-  const { year, records } = doitData;
+  const { records } = doitData;
 
   if (!records?.length) return null;
 
@@ -165,7 +202,7 @@ export async function generateDoitHtml(doitData) {
   const recordsHtml = records.map(generateRecordHtml).join("");
 
   // 生成总览 HTML
-  const summaryHtml = generateSummaryHtml(summary, year);
+  const summaryHtml = generateSummaryHtml(summary);
 
   // 读取并填充模板
   const template = await fs.readFile(PATHS.templateDoit, "utf-8");
