@@ -25,6 +25,7 @@ import { generateFeed } from "./utils/feed.js";
 import { generateIndexPages } from "./templates/index.js";
 import { generateArchiveHtml } from "./templates/archive.js";
 import { processJournals, generateJournalsHtml } from "./utils/journals.js";
+import { processDoitData, generateDoitHtml } from "./utils/doit.js";
 import { PATHS } from "./config.js";
 import {
   getAllSourceFiles,
@@ -32,6 +33,7 @@ import {
   shouldRebuildJournals,
   shouldRebuildFeed,
   shouldRebuildIndex,
+  shouldRebuildDoit,
 } from "./utils/build-deps.js";
 
 // 清理旧文件
@@ -145,6 +147,7 @@ async function checkSourceChanges(buildHashes = {}) {
     needRebuildJournals: shouldRebuildJournals(changedFiles),
     needRebuildFeed: shouldRebuildFeed(changedFiles),
     needRebuildIndex: shouldRebuildIndex(changedFiles),
+    needRebuildDoit: shouldRebuildDoit(changedFiles),
   };
 }
 
@@ -370,6 +373,61 @@ async function handleJournals(
   }
 }
 
+// 处理行动页面
+async function handleDoit(buildHashes = {}, doitTemplateChanged = false) {
+  try {
+    const doitPath = PATHS.doit;
+    const outputPath = PATHS.distDoit;
+
+    // 检查输出文件是否存在
+    let outputExists = true;
+    try {
+      await fs.access(outputPath);
+    } catch {
+      outputExists = false;
+    }
+
+    // 获取当前文件的哈希值
+    let currentHash = null;
+    try {
+      currentHash = await calculateHash(doitPath);
+    } catch {
+      // doit.json 可能不存在
+      return null;
+    }
+
+    // 判断是否需要重建
+    const needsRebuild =
+      doitTemplateChanged ||
+      !outputExists ||
+      !buildHashes[doitPath] ||
+      buildHashes[doitPath] !== currentHash;
+
+    if (needsRebuild) {
+      // 读取并处理数据
+      const doitData = await processDoitData();
+      if (!doitData?.records?.length) return null;
+
+      // 生成并写入HTML
+      const html = await generateDoitHtml(doitData);
+      await fs.writeFile(outputPath, html);
+
+      console.log(
+        `\n处理行动页面: ${doitData.year}年 共 ${doitData.records.length} 条记录`
+      );
+
+      return {
+        hash: currentHash,
+      };
+    }
+
+    return null;
+  } catch (error) {
+    console.error("处理行动页面失败:", error);
+    return null;
+  }
+}
+
 /**
  * 主构建函数
  *
@@ -431,6 +489,12 @@ export async function buildSite() {
       sourceChanges.needRebuildJournals
     );
 
+    // 7. 处理行动页面
+    const doitResult = await handleDoit(
+      cleanedHashes,
+      sourceChanges.needRebuildDoit
+    );
+
     // 7. 合并所有哈希值（简化逻辑）
     const newHashes = { ...cleanedHashes };
 
@@ -448,6 +512,11 @@ export async function buildSite() {
     // 添加碎语哈希
     if (journalsResult?.hash) {
       newHashes[PATHS.journals] = journalsResult.hash;
+    }
+
+    // 添加行动哈希
+    if (doitResult?.hash) {
+      newHashes[PATHS.doit] = doitResult.hash;
     }
 
     // 8. 按日期排序文章

@@ -43,6 +43,7 @@ export const PATHS = {
   about: "./about.md",
   journals: "./journals.json",
   journalsMd: "./journals.md",
+  doit: "./doit.json",
 
   // 输出目录
   dist: "./dist",
@@ -51,12 +52,14 @@ export const PATHS = {
   distIndex: "./dist/index.html",
   distAbout: "./dist/about.html",
   distJournals: "./dist/journals.html",
+  distDoit: "./dist/doit.html",
   distFeed: "./dist/feed",
 
   // 模板文件
   templatePage: "./src/templates/page.html",
   templateStyle: "./src/templates/style.css",
   templateJournals: "./src/templates/journals.html",
+  templateDoit: "./src/templates/doit.html",
 
   // 构建缓存
   buildHash: "./.build-hash.json",

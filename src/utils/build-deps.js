@@ -1,11 +1,11 @@
 /**
  * 构建依赖关系管理模块
- * 
+ *
  * 作用：
  * 1. 定义所有源文件的依赖关系
  * 2. 确定哪些文件变化会影响哪些输出
  * 3. 提供清晰的依赖追踪逻辑
- * 
+ *
  * 设计原则：
  * - 数据驱动：依赖关系通过数据结构定义，不散落在代码中
  * - 单一职责：只负责依赖关系判断，不做实际构建
@@ -14,7 +14,7 @@
 
 /**
  * 构建依赖定义
- * 
+ *
  * 依赖分类：
  * - global: 全局依赖，影响所有输出（配置文件）
  * - articleDeps: 文章依赖，影响所有文章页面
@@ -24,37 +24,42 @@
  */
 export const BUILD_DEPS = {
   // 全局配置文件 - 影响所有输出
-  global: [
-    './src/config.js'
-  ],
-  
+  global: ["./src/config.js"],
+
   // 文章相关 - 影响所有文章页面和about页面
   articleDeps: [
-    './src/templates/page.html',    // 文章HTML模板
-    './src/templates/style.css',    // 全局样式
-    './src/utils/post.js',          // Markdown处理逻辑
-    './src/utils/slug.js',          // URL生成逻辑
-    './src/utils/date.js',          // 日期格式化
+    "./src/templates/page.html", // 文章HTML模板
+    "./src/templates/style.css", // 全局样式
+    "./src/utils/post.js", // Markdown处理逻辑
+    "./src/utils/slug.js", // URL生成逻辑
+    "./src/utils/date.js", // 日期格式化
   ],
-  
+
   // 首页相关 - 影响首页生成
   indexDeps: [
-    './src/templates/index.js',     // 首页模板
-    './src/templates/style.css',    // 全局样式
+    "./src/templates/index.js", // 首页模板
+    "./src/templates/style.css", // 全局样式
   ],
-  
+
   // 碎语相关 - 影响碎语页面
   journalDeps: [
-    './src/templates/journals.html', // 碎语模板
-    './src/templates/style.css',     // 全局样式
-    './src/utils/journals.js',       // 碎语处理逻辑
+    "./src/templates/journals.html", // 碎语模板
+    "./src/templates/style.css", // 全局样式
+    "./src/utils/journals.js", // 碎语处理逻辑
   ],
-  
+
   // RSS相关 - 影响feed生成
   feedDeps: [
-    './src/utils/feed.js',           // RSS生成逻辑
-    './src/utils/date.js',           // 日期格式化
-  ]
+    "./src/utils/feed.js", // RSS生成逻辑
+    "./src/utils/date.js", // 日期格式化
+  ],
+
+  // 行动相关 - 影响行动页面
+  doitDeps: [
+    "./src/templates/doit.html", // 行动模板
+    "./src/templates/style.css", // 全局样式
+    "./src/utils/doit.js", // 行动处理逻辑
+  ],
 };
 
 /**
@@ -68,8 +73,9 @@ export function getAllSourceFiles() {
     ...BUILD_DEPS.indexDeps,
     ...BUILD_DEPS.journalDeps,
     ...BUILD_DEPS.feedDeps,
+    ...BUILD_DEPS.doitDeps,
   ];
-  
+
   // 去重
   return [...new Set(allFiles)];
 }
@@ -81,7 +87,7 @@ export function getAllSourceFiles() {
  */
 export function shouldRebuildArticles(changedFiles) {
   const deps = [...BUILD_DEPS.global, ...BUILD_DEPS.articleDeps];
-  return changedFiles.some(file => deps.includes(file));
+  return changedFiles.some((file) => deps.includes(file));
 }
 
 /**
@@ -91,7 +97,7 @@ export function shouldRebuildArticles(changedFiles) {
  */
 export function shouldRebuildIndex(changedFiles) {
   const deps = [...BUILD_DEPS.global, ...BUILD_DEPS.indexDeps];
-  return changedFiles.some(file => deps.includes(file));
+  return changedFiles.some((file) => deps.includes(file));
 }
 
 /**
@@ -101,7 +107,7 @@ export function shouldRebuildIndex(changedFiles) {
  */
 export function shouldRebuildJournals(changedFiles) {
   const deps = [...BUILD_DEPS.global, ...BUILD_DEPS.journalDeps];
-  return changedFiles.some(file => deps.includes(file));
+  return changedFiles.some((file) => deps.includes(file));
 }
 
 /**
@@ -111,5 +117,15 @@ export function shouldRebuildJournals(changedFiles) {
  */
 export function shouldRebuildFeed(changedFiles) {
   const deps = [...BUILD_DEPS.global, ...BUILD_DEPS.feedDeps];
-  return changedFiles.some(file => deps.includes(file));
+  return changedFiles.some((file) => deps.includes(file));
+}
+
+/**
+ * 检查是否需要重建行动页面
+ * @param {string[]} changedFiles - 发生变化的文件列表
+ * @returns {boolean} 是否需要重建行动页面
+ */
+export function shouldRebuildDoit(changedFiles) {
+  const deps = [...BUILD_DEPS.global, ...BUILD_DEPS.doitDeps];
+  return changedFiles.some((file) => deps.includes(file));
 }

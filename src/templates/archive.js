@@ -32,6 +32,7 @@ export function generateArchiveHtml(posts) {
       <h1 class="site-title">文章归档</h1>
       <nav class="simple-nav">
         <a href="/">首页</a>
+        <a href="/doit">行动</a>
         <a href="/journals">碎语</a>
         <a href="/about#now">现在</a>
         <a href="/about">关于</a>

@@ -810,3 +810,85 @@ table {
     max-width: 70%;
   }
 }
+
+/* ================================
+ * 行动页面 (Doit)
+ * ================================ */
+
+.doit-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  padding: var(--space-sm) 0;
+  margin-bottom: var(--space-md);
+  border-bottom: 1px dashed var(--border-color);
+}
+
+.doit-summary-item {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.doit-summary-item .summary-label {
+  font-size: var(--font-small);
+  color: var(--color-gray);
+}
+
+.doit-summary-item .summary-value {
+  font-size: var(--font-base);
+  font-weight: 600;
+  color: var(--color-heading);
+}
+
+.doit-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.doit-item {
+  padding: 12px 0;
+  border-bottom: 1px dashed var(--border-color);
+  font-size: 0.95em;
+  color: var(--color-text);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: baseline;
+}
+
+.doit-item:last-child {
+  border-bottom: none;
+}
+
+.doit-date {
+  font-weight: 600;
+  color: var(--color-heading);
+  min-width: 42px;
+}
+
+.doit-sleep,
+.doit-wake {
+  color: var(--color-text);
+}
+
+.doit-steps {
+  color: var(--color-link);
+}
+
+.doit-exercise {
+  color: var(--color-link-visited);
+}
+
+/* 移动端适配 */
+@media (max-width: 700px) {
+  .doit-summary {
+    flex-wrap: wrap;
+    gap: var(--space-md);
+  }
+
+  .doit-summary-item {
+    flex: 1;
+    min-width: 80px;
+  }
+}

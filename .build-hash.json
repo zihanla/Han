@@ -1,12 +1,12 @@
 {
-  "./src/config.js": "239a981a858fdc1192ca4a6b059ee7de",
+  "./src/config.js": "290d49d23f2728b95295b9e0a4281303",
   "./src/templates/page.html": "327e054432eb760e245285398999063b",
-  "./src/templates/style.css": "83e50184dbff3913c5f74fb501fd1124",
+  "./src/templates/style.css": "7825dbf13d661d6800391c0197527d77",
   "./src/utils/post.js": "f325abc6900689b5632fb42aea7145b2",
   "./src/utils/slug.js": "e1f575f2b75eb03152b7a9fb2399e39d",
   "./src/utils/date.js": "47853ea9d45acad22c60d09e76f23cc0",
-  "./src/templates/index.js": "7aeb23e2f769a44f40df5404f6cfa881",
-  "./src/templates/journals.html": "760cf669a33a07b62265e246ee85efe3",
+  "./src/templates/index.js": "6a9533dd6c1dabb14818bd1dd425c87b",
+  "./src/templates/journals.html": "1ad97901218235a9346b0d14302eeb5f",
   "./src/utils/journals.js": "01433b47295b691d4b19cd3775904476",
   "./src/utils/feed.js": "d526eff0db81010161e2885012fa6c65",
   "./journals.json": "6942cda7d6fb618b32284e0154f6ac2a",
@@ -38,6 +38,7 @@
   "./content/大理昆明小游库存.md": "943d6707a310dc91ce4e9c4995eac43e",
   "./content/宏碁传奇X热键功能恢复.md": "6dfe1173519c8d1c1b7077108e22de65",
   "./content/尝试冷水洗澡.md": "84fb38260ebc4608352a6b2ecc9dde95",
+  "./content/尝试自我抗争中.md": "d5654461342981ce1e0601fdefbb4550",
   "./content/意外的礼物，悄悄的开花.md": "1409f7893b37d41fc087f4f506342677",
   "./content/慢下来.md": "624f68adc41873443b6ae04313f61edf",
   "./content/我与病魔斗智斗勇.md": "05ac5b482a442094e8121d4a84204ee0",
@@ -64,5 +65,7 @@
   "./content/骑行的收获.md": "ad43a697b3d6fdb65df45691496dcf77",
   "./content/黎明前的潜伏.md": "fa164ef66111b6d6d88e89573deeea2b",
   "./about.md": "41c694bbbc68ae584bf437ba6d0f85a1",
-  "./content/尝试自我抗争中.md": "d5654461342981ce1e0601fdefbb4550"
+  "./src/templates/doit.html": "af14647b10b7acf71c7b46900d8b398d",
+  "./src/utils/doit.js": "0be893b2d1ffa8da77cf94747b26d72a",
+  "./doit.json": "7ad5039204ce96fcf63d08df427436a9"
 }

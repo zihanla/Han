@@ -119,6 +119,7 @@ function generatePageHtml(items, currentPage, totalPages) {
       <h1 class="site-title"><a href="/">涵有闲</a></h1>
       <nav class="simple-nav">
         <a href="/archive">文章</a>
+        <a href="/doit">行动</a>
         <a href="/journals">碎语</a>
         <a href="/about#now">现在</a>
         <a href="/about">关于</a>
