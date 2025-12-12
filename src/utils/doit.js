@@ -2,21 +2,14 @@ import fs from "fs/promises";
 import { BLOG_CONFIG, PATHS } from "../config.js";
 
 /**
- * 解析时间字符串（如 "8.18" -> 8.18 小时）
+ * 解析时间字符串（支持 "8:18" 或 "8.18" 格式 -> 小时数）
  */
 function parseTime(timeStr) {
   if (!timeStr) return null;
-  const [hours, minutes] = timeStr.split(".").map(Number);
+  // 支持冒号或点号分隔
+  const separator = timeStr.includes(":") ? ":" : ".";
+  const [hours, minutes] = timeStr.split(separator).map(Number);
   return hours + (minutes || 0) / 60;
-}
-
-/**
- * 格式化时间显示（如 "8.18" -> "8:18"）
- */
-function formatTime(timeStr) {
-  if (!timeStr) return "";
-  const [hours, minutes] = timeStr.split(".");
-  return `${hours}:${minutes?.padStart(2, "0") || "00"}`;
 }
 
 /**
@@ -55,7 +48,7 @@ function extractYear(dateStr) {
 }
 
 /**
- * 计算统计数据（扁平化结构：record.gongtougong）
+ * 计算统计数据（新格式：record.items）
  */
 function calculateSummary(records) {
   let earlyWakeCount = 0;
@@ -63,20 +56,22 @@ function calculateSummary(records) {
   let totalGongtougong = 0;
 
   for (const record of records) {
-    // 早起统计
-    const wakeTime = parseTime(record.wake);
+    const items = record.items || {};
+
+    // 早起统计 (items["起"])
+    const wakeTime = parseTime(items["起"]);
     if (wakeTime !== null && wakeTime < 8) {
       earlyWakeCount++;
     }
 
-    // 步数统计
-    if (record.steps) {
-      totalSteps += record.steps;
+    // 步数统计 (items["步"])
+    if (items["步"]) {
+      totalSteps += items["步"];
     }
 
-    // 拱头功统计（扁平化：直接访问 record.gongtougong）
-    if (record.gongtougong) {
-      totalGongtougong += record.gongtougong;
+    // 拱头功统计 (items["拱头功"])
+    if (items["拱头功"]) {
+      totalGongtougong += items["拱头功"];
     }
   }
 
@@ -89,39 +84,45 @@ function calculateSummary(records) {
 }
 
 /**
- * 生成单条记录 HTML（扁平化结构）
+ * 生成单条记录 HTML（新格式：record.items 支持多个动态项）
  */
 function generateRecordHtml(record) {
   const parts = [];
+  const items = record.items || {};
 
   // 日期（只显示月.日）
   const displayDate = extractMonthDay(record.date);
   parts.push(`<span class="doit-date">${displayDate}</span>`);
 
-  // 睡眠时间
-  if (record.sleep) {
-    parts.push(
-      `<span class="doit-sleep">${formatTime(record.sleep)} 睡</span>`
-    );
-  }
+  // 遍历所有 items 动态生成
+  for (const [key, value] of Object.entries(items)) {
+    if (value === null || value === undefined) continue;
 
-  // 起床时间
-  if (record.wake) {
-    parts.push(`<span class="doit-wake">${formatTime(record.wake)} 起</span>`);
-  }
-
-  // 步数
-  if (record.steps) {
-    parts.push(
-      `<span class="doit-steps">${record.steps.toLocaleString()} 步</span>`
-    );
-  }
-
-  // 拱头功（扁平化：直接访问 record.gongtougong）
-  if (record.gongtougong) {
-    parts.push(
-      `<span class="doit-exercise">拱头功 ${record.gongtougong} 个</span>`
-    );
+    // 根据 key 类型选择不同的样式和格式
+    switch (key) {
+      case "睡":
+        parts.push(`<span class="doit-sleep">${value} 睡</span>`);
+        break;
+      case "起":
+        parts.push(`<span class="doit-wake">${value} 起</span>`);
+        break;
+      case "步":
+        parts.push(
+          `<span class="doit-steps">${value.toLocaleString()} 步</span>`
+        );
+        break;
+      case "拱头功":
+        parts.push(`<span class="doit-exercise">拱头功 ${value} 个</span>`);
+        break;
+      default:
+        // 其他自定义项目
+        if (typeof value === "number") {
+          parts.push(`<span class="doit-item-custom">${key} ${value}</span>`);
+        } else {
+          parts.push(`<span class="doit-item-custom">${value} ${key}</span>`);
+        }
+        break;
+    }
   }
 
   return `<div class="doit-item">${parts.join(" ")}</div>`;
@@ -151,14 +152,14 @@ function generateSummaryHtml(summary) {
 
 /**
  * 处理行动数据
- * 支持扁平数组格式：[{ "date": "2025.07.25", ... }]
+ * 支持新格式：[{ "date": "2025.12.12", "items": { ... } }]
  */
 export async function processDoitData() {
   try {
     const content = await fs.readFile(PATHS.doit, "utf-8");
     const data = JSON.parse(content);
 
-    // 扁平数组格式
+    // 数组格式
     if (Array.isArray(data)) {
       // 按日期降序排序
       const records = data.sort((a, b) => {

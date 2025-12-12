@@ -880,6 +880,10 @@ table {
   color: var(--color-link-visited);
 }
 
+.doit-item-custom {
+  color: var(--color-text);
+}
+
 /* 移动端适配 */
 @media (max-width: 700px) {
   .doit-summary {
